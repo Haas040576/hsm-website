@@ -365,6 +365,8 @@ const campusParts = [foundation,hall,hallRoof,hallFront,officeBlock,officeFront,
 for(const part of campusParts){ part.userData.baseY = part.position.y; part.scale.set(1,.001,1); part.position.y = 0.02; }
 [...campus.children].forEach(ch => { if(ch !== foundation && ch !== hall && ch !== hallRoof && ch !== hallFront && ch !== officeBlock && ch !== officeFront && ch !== tower && ch !== towerCap && ch !== stack1 && ch !== stack2 && ch !== cap1 && ch !== cap2 && ch !== pipe1 && ch !== pipe2 && ch !== silo1 && ch !== silo2 && ch !== bay1 && ch !== bay2 && ch !== bay3 && ch !== plazaWalk){ ch.scale.set(.001,.001,.001); ch.userData.baseScale = 1; }});
 bgBlocks.scale.set(1,.001,1);
+setOpacity(campus, 0);
+setOpacity(bgBlocks, 0);
 plaza.material.opacity = 0;
 
 let target = reduced ? 1 : 0;
@@ -409,22 +411,25 @@ function animate(){
   current += (target - current) * (1 - Math.exp(-dt * 4.2));
   const p = current;
 
-  const holdHut = 1 - smooth(p, .44, .74);
+  const holdHut = 1 - smooth(p, .40, .52);
   const prep = smooth(p, .18, .32);
-  const foundationR = easeOut(smooth(p, .24, .42));
-  const hallR = easeOut(smooth(p, .32, .56));
-  const officeR = easeOut(smooth(p, .40, .64));
-  const towerR = easeOut(smooth(p, .48, .78));
-  const stacksR = easeOut(smooth(p, .44, .70));
-  const detailsR = easeOut(smooth(p, .60, .88));
+  const foundationR = easeOut(smooth(p, .42, .54));
+  const hallR = easeOut(smooth(p, .48, .66));
+  const officeR = easeOut(smooth(p, .52, .70));
+  const towerR = easeOut(smooth(p, .56, .82));
+  const stacksR = easeOut(smooth(p, .54, .78));
+  const detailsR = easeOut(smooth(p, .66, .90));
   const finalR = smooth(p, .86, .98);
+  const companyAlpha = smooth(p, .44, .60);
 
   hut.scale.set(lerp(.98,1.04,prep), lerp(.98,1.03,prep), lerp(.98,1.03,prep));
   hut.position.y = lerp(0,.08,prep);
   hut.position.x = lerp(0,-.10,smooth(p,.30,.54));
   setOpacity(hutScene, holdHut);
+  setOpacity(campus, companyAlpha);
+  setOpacity(bgBlocks, smooth(p, .70, .92));
   forest.position.x = lerp(0,-.45,smooth(p,.36,.64));
-  dirt.material.opacity = lerp(1,.18,smooth(p,.55,.88)); dirt.material.transparent = true;
+  dirt.material.opacity = lerp(1,.12,smooth(p,.58,.86)); dirt.material.transparent = true;
   plaza.material.opacity = lerp(0,1,detailsR);
 
   foundation.scale.y = Math.max(.001, foundationR); foundation.position.y = foundation.userData.baseY * foundationR;
