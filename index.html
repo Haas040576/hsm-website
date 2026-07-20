@@ -271,23 +271,26 @@ const hutScene = new THREE.Group();
 world.add(hutScene);
 const hut = new THREE.Group();
 hutScene.add(hut);
-const hutMain = box(4.6,2.7,3.5,mats.wood); hutMain.position.set(0,1.55,0); hut.add(hutMain);
-const hutSide = box(2.2,2.25,2.9,mats.wood); hutSide.position.set(2.78,1.35,0.1); hut.add(hutSide);
-const porchFloor = box(3.25,.28,2.4,mats.porch); porchFloor.position.set(-1.22,.34,1.92); hut.add(porchFloor);
-const step1 = box(.95,.16,.46,mats.porch); step1.position.set(-2.25,.12,2.95); hut.add(step1);
-const step2 = box(.58,.16,.46,mats.porch); step2.position.set(-2.8,-.02,3.34); hut.add(step2);
-[[ -2.47,1.05,3.03 ],[ -1.2,1.05,3.03 ],[ .15,1.05,3.03 ]].forEach(([x,y,z])=>{const p=cyl(.09,.11,1.55,mats.porch,10); p.position.set(x,y,z); hut.add(p);});
-[[ -2.47,.42,3.03 ],[ -1.2,.42,3.03 ],[ .15,.42,3.03 ]].forEach(([x,y,z])=>{const p=cyl(.05,.05,.74,mats.porch,8); p.position.set(x,y,z); hut.add(p);});
-const railA = box(2.7,.1,.1,mats.porch); railA.position.set(-1.15,.76,3.03); hut.add(railA);
-const railB = box(1.05,.1,.1,mats.porch); railB.position.set(.73,.76,3.03); hut.add(railB);
-const door = box(.88,1.82,.08,new THREE.MeshStandardMaterial({ color:0x684d37, roughness:.92 })); door.position.set(-.55,1.08,1.8); hut.add(door);
-const doorGlass = box(.34,.55,.09,mats.hutGlass); doorGlass.position.set(-.55,1.42,1.84); hut.add(doorGlass);
-[[-1.58,1.52,1.8],[1.02,1.52,1.8],[4.02,1.42,.74]].forEach(([x,y,z],i)=>{const w = i<2?0.82:0.94; const h=i<2?0.86:0.84; const pane = box(w,h,.08,mats.hutGlass); pane.position.set(x,y,z); hut.add(pane);});
-const roofL = box(6.1,.18,4.12,mats.roof); roofL.position.set(.2,3.26,0); roofL.rotation.z = Math.PI/7.2; hut.add(roofL);
-const roofR = box(6.1,.18,4.12,mats.roof); roofR.position.set(.2,3.26,0); roofR.rotation.z = -Math.PI/7.2; hut.add(roofR);
-const roofL2 = box(3.1,.18,3.25,mats.roof); roofL2.position.set(2.78,3.02,0.1); roofL2.rotation.z = Math.PI/7.3; hut.add(roofL2);
-const roofR2 = box(3.1,.18,3.25,mats.roof); roofR2.position.set(2.78,3.02,0.1); roofR2.rotation.z = -Math.PI/7.3; hut.add(roofR2);
-const chimney = box(.34,1.1,.34,new THREE.MeshStandardMaterial({ color:0x594940, roughness:.88 })); chimney.position.set(1.7,3.67,-.72); hut.add(chimney);
+const hutMain = box(3.7,2.2,2.75,mats.wood); hutMain.position.set(0,1.18,0); hut.add(hutMain);
+const porchFloor = box(2.2,.2,1.55,mats.porch); porchFloor.position.set(-.95,.2,1.56); hut.add(porchFloor);
+const step1 = box(.78,.12,.32,mats.porch); step1.position.set(-1.62,.06,2.34); hut.add(step1);
+const step2 = box(.46,.1,.32,mats.porch); step2.position.set(-2.02,-.02,2.64); hut.add(step2);
+[[-1.78,.92,2.18],[-.92,.92,2.18],[-.05,.92,2.18],[.86,.92,2.18]].forEach(([x,y,z])=>{ const p=cyl(.06,.08,1.34,mats.porch,10); p.position.set(x,y,z); hut.add(p); });
+[[-1.78,.42,2.18],[-.92,.42,2.18],[-.05,.42,2.18],[.86,.42,2.18]].forEach(([x,y,z])=>{ const p=cyl(.04,.04,.56,mats.porch,8); p.position.set(x,y,z); hut.add(p); });
+const railFront = box(2.72,.08,.08,mats.porch); railFront.position.set(-.46,.72,2.18); hut.add(railFront);
+const railSide = box(.08,.08,1.1,mats.porch); railSide.position.set(.9,.72,1.72); hut.add(railSide);
+const door = box(.82,1.62,.08,new THREE.MeshStandardMaterial({ color:0x6a4f38, roughness:.92 })); door.position.set(-.18,.98,1.41); hut.add(door);
+const doorGlass = box(.26,.46,.09,mats.hutGlass); doorGlass.position.set(-.18,1.28,1.45); hut.add(doorGlass);
+[[-1.25,1.28,1.41],[.82,1.28,1.41],[1.9,1.22,.3]].forEach(([x,y,z],i)=>{ const pane=box(i<2?.72:.82, i<2?.74:.78, .08, mats.hutGlass); pane.position.set(x,y,z); hut.add(pane); });
+const frameA = box(.08,1.72,.1,new THREE.MeshStandardMaterial({ color:0x8c6d4e, roughness:.95 })); frameA.position.set(-1.25,1.28,1.45); hut.add(frameA);
+const frameB = box(.08,1.72,.1,new THREE.MeshStandardMaterial({ color:0x8c6d4e, roughness:.95 })); frameB.position.set(.82,1.28,1.45); hut.add(frameB);
+const roofL = box(4.65,.13,3.25,mats.roof); roofL.position.set(.08,2.58,0); roofL.rotation.z = Math.PI/7.4; hut.add(roofL);
+const roofR = box(4.65,.13,3.25,mats.roof); roofR.position.set(.08,2.58,0); roofR.rotation.z = -Math.PI/7.4; hut.add(roofR);
+const roofCap = box(.18,.18,3.08,new THREE.MeshStandardMaterial({ color:0x5b3928, roughness:.86 })); roofCap.position.set(.08,2.93,0); hut.add(roofCap);
+const chimney = box(.24,.92,.24,new THREE.MeshStandardMaterial({ color:0x5c4a40, roughness:.88 })); chimney.position.set(1.05,3.08,-.54); hut.add(chimney);
+[[-1.4,.1,1.12],[-.45,.1,1.12],[.5,.1,1.12],[1.48,.1,1.12]].forEach(([x,y,z])=>{ const stone = box(.36,.2,.34,mats.stone); stone.position.set(x,y,z); hut.add(stone); });
+[[-1.4,.1,-1.08],[-.45,.1,-1.08],[.5,.1,-1.08],[1.48,.1,-1.08]].forEach(([x,y,z])=>{ const stone = box(.36,.2,.34,mats.stone); stone.position.set(x,y,z); hut.add(stone); });
+hut.scale.setScalar(.86);
 
 const forest = new THREE.Group(); hutScene.add(forest);
 function tree(x,z,s=1){
@@ -302,39 +305,42 @@ function tree(x,z,s=1){
 // Industry scene
 const campus = new THREE.Group();
 world.add(campus);
-const foundation = box(15.5,.42,10.8,mats.concrete); foundation.position.set(0,.21,0); campus.add(foundation);
-const hall = box(9.6,4.6,5.8,mats.dark); hall.position.set(-1.8,2.5,-.2); campus.add(hall);
-const hallRoof = box(10.1,.18,6.15,new THREE.MeshStandardMaterial({ color:0x22384d, roughness:.74, metalness:.25 })); hallRoof.position.set(-1.8,4.92,-.2); campus.add(hallRoof);
-const hallFront = box(9.2,3.4,.08,mats.warmGlass); hallFront.position.set(-1.8,2.35,2.74); campus.add(hallFront);
-for(let x=-6.1;x<=2.4;x+=1.02){ const mull = box(.08,3.55,.1,mats.frame); mull.position.set(x,2.35,2.8); campus.add(mull);} 
-for(let y=.9;y<4.1;y+=.78){ const trans = box(9.2,.05,.1,mats.frame); trans.position.set(-1.8,y,2.8); campus.add(trans);} 
-const officeBlock = box(3.5,7.2,4.1,mats.dark); officeBlock.position.set(-5.35,3.8,.68); campus.add(officeBlock);
-const officeFront = box(3.22,6.0,.08,mats.warmGlass); officeFront.position.set(-5.35,3.8,2.78); campus.add(officeFront);
-for(let x=-6.7;x<=-4.1;x+=.68){ const mull = box(.05,6.1,.1,mats.frame); mull.position.set(x,3.8,2.82); campus.add(mull);} 
-for(let y=1.3;y<6.5;y+=1.03){ const trans = box(3.25,.05,.1,mats.frame); trans.position.set(-5.35,y,2.82); campus.add(trans);} 
-const tower = box(4.2,15.2,4.0,mats.glass); tower.position.set(3.15,7.8,.22); campus.add(tower);
-const towerCap = box(4.5,.22,4.3,mats.frame); towerCap.position.set(3.15,15.52,.22); campus.add(towerCap);
-const towerSign = new THREE.Mesh(new THREE.PlaneGeometry(2.2,.6), new THREE.MeshBasicMaterial({ map: signTex, transparent:true })); towerSign.position.set(3.15,14.35,2.28); campus.add(towerSign);
-for(let x=1.1;x<=5.1;x+=.55){ const mull = box(.05,15.3,4.06,mats.frame); mull.position.set(x,7.8,.22); campus.add(mull);} 
-for(let y=.95;y<15.1;y+=1.14){ const trans = box(4.3,.05,4.06,mats.frame); trans.position.set(3.15,y,.22); campus.add(trans);} 
-const stack1 = cyl(.38,.46,7.8,new THREE.MeshStandardMaterial({ color:0xbcc5cc, roughness:.94 }),18); stack1.position.set(-7.5,3.9,-1.4); campus.add(stack1);
-const stack2 = cyl(.32,.42,6.4,new THREE.MeshStandardMaterial({ color:0xd0d7dd, roughness:.94 }),18); stack2.position.set(-6.2,3.2,-2.1); campus.add(stack2);
-const cap1 = box(.78,.2,.78,new THREE.MeshStandardMaterial({ color:0x4b5c68, roughness:.6 })); cap1.position.set(-7.5,7.88,-1.4); campus.add(cap1);
-const cap2 = box(.66,.2,.66,new THREE.MeshStandardMaterial({ color:0x4b5c68, roughness:.6 })); cap2.position.set(-6.2,6.46,-2.1); campus.add(cap2);
-const pipe1 = cyl(.18,.18,4.8,new THREE.MeshStandardMaterial({ color:0x84919a, roughness:.72, metalness:.2 }),12); pipe1.rotation.z = Math.PI/2; pipe1.position.set(-4.45,2.85,-1.55); campus.add(pipe1);
-const pipe2 = cyl(.18,.18,3.1,new THREE.MeshStandardMaterial({ color:0x84919a, roughness:.72, metalness:.2 }),12); pipe2.position.set(-2.1,2.0,-1.55); campus.add(pipe2);
-const silo1 = cyl(.64,.64,4.4,new THREE.MeshStandardMaterial({ color:0xd6dde3, roughness:.95 }),18); silo1.position.set(8.1,2.2,-1.45); campus.add(silo1);
-const silo2 = cyl(.54,.54,3.5,new THREE.MeshStandardMaterial({ color:0xd0d8df, roughness:.95 }),18); silo2.position.set(9.35,1.75,-1.9); campus.add(silo2);
-const bay1 = box(1.55,1.6,.12,new THREE.MeshStandardMaterial({ color:0xcad3d8, roughness:.8 })); bay1.position.set(-3.8,.98,2.86); campus.add(bay1);
-const bay2 = box(1.55,1.6,.12,new THREE.MeshStandardMaterial({ color:0xcad3d8, roughness:.8 })); bay2.position.set(-1.8,.98,2.86); campus.add(bay2);
-const bay3 = box(1.55,1.6,.12,new THREE.MeshStandardMaterial({ color:0xcad3d8, roughness:.8 })); bay3.position.set(.2,.98,2.86); campus.add(bay3);
-const plazaWalk = new THREE.Mesh(new THREE.PlaneGeometry(24,8), mats.concrete); plazaWalk.rotation.x = -Math.PI/2; plazaWalk.position.set(0,.03,7.2); plazaWalk.receiveShadow = true; campus.add(plazaWalk);
+const foundation = box(13.4,.34,8.8,mats.concrete); foundation.position.set(0,.17,0); campus.add(foundation);
+const hall = box(8.2,3.8,4.8,mats.dark); hall.position.set(-1.05,2.0,-.2); campus.add(hall);
+const hallRoof = box(8.55,.16,5.05,new THREE.MeshStandardMaterial({ color:0x22384d, roughness:.74, metalness:.24 })); hallRoof.position.set(-1.05,3.98,-.2); campus.add(hallRoof);
+const hallFront = box(7.85,2.9,.08,mats.warmGlass); hallFront.position.set(-1.05,1.96,2.22); campus.add(hallFront);
+for(let x=-4.7;x<=2.5;x+=.88){ const mull = box(.07,3.0,.1,mats.frame); mull.position.set(x,1.96,2.27); campus.add(mull);} 
+for(let y=.88;y<3.35;y+=.7){ const trans = box(7.9,.05,.1,mats.frame); trans.position.set(-1.05,y,2.27); campus.add(trans);} 
+const officeBlock = box(2.75,5.5,3.35,mats.dark); officeBlock.position.set(-4.85,2.85,.34); campus.add(officeBlock);
+const officeFront = box(2.48,4.55,.08,mats.warmGlass); officeFront.position.set(-4.85,2.88,1.75); campus.add(officeFront);
+for(let x=-5.9;x<=-3.8;x+=.55){ const mull = box(.05,4.7,.1,mats.frame); mull.position.set(x,2.88,1.8); campus.add(mull);} 
+for(let y=1.15;y<5.0;y+=.88){ const trans = box(2.52,.05,.1,mats.frame); trans.position.set(-4.85,y,1.8); campus.add(trans);} 
+const tower = box(3.55,11.6,3.35,mats.glass); tower.position.set(2.45,5.98,.1); campus.add(tower);
+const towerCap = box(3.86,.18,3.62,mats.frame); towerCap.position.set(2.45,11.88,.1); campus.add(towerCap);
+const topSetback = box(2.45,2.65,2.3,mats.glass); topSetback.position.set(2.65,13.25,.08); campus.add(topSetback);
+const topCap = box(2.7,.14,2.55,mats.frame); topCap.position.set(2.65,14.62,.08); campus.add(topCap);
+const towerSign = new THREE.Mesh(new THREE.PlaneGeometry(1.8,.46), new THREE.MeshBasicMaterial({ map: signTex, transparent:true })); towerSign.position.set(2.45,10.95,1.86); campus.add(towerSign);
+for(let x=.85;x<=4.02;x+=.46){ const mull = box(.05,11.72,3.4,mats.frame); mull.position.set(x,5.98,.1); campus.add(mull);} 
+for(let y=.92;y<11.5;y+=1.02){ const trans = box(3.62,.05,3.4,mats.frame); trans.position.set(2.45,y,.1); campus.add(trans);} 
+const stack1 = cyl(.26,.32,5.8,new THREE.MeshStandardMaterial({ color:0xc6ced5, roughness:.95 }),18); stack1.position.set(-6.8,2.92,-1.6); campus.add(stack1);
+const stack2 = cyl(.22,.28,4.8,new THREE.MeshStandardMaterial({ color:0xd2d9de, roughness:.95 }),18); stack2.position.set(-5.7,2.42,-2.05); campus.add(stack2);
+const cap1 = box(.54,.16,.54,new THREE.MeshStandardMaterial({ color:0x4b5c68, roughness:.6 })); cap1.position.set(-6.8,5.88,-1.6); campus.add(cap1);
+const cap2 = box(.48,.16,.48,new THREE.MeshStandardMaterial({ color:0x4b5c68, roughness:.6 })); cap2.position.set(-5.7,4.84,-2.05); campus.add(cap2);
+const pipe1 = cyl(.12,.12,3.1,new THREE.MeshStandardMaterial({ color:0x85929b, roughness:.72, metalness:.2 }),12); pipe1.rotation.z = Math.PI/2; pipe1.position.set(-3.25,2.3,-1.45); campus.add(pipe1);
+const pipe2 = cyl(.12,.12,2.15,new THREE.MeshStandardMaterial({ color:0x85929b, roughness:.72, metalness:.2 }),12); pipe2.position.set(-1.5,1.68,-1.45); campus.add(pipe2);
+const silo1 = cyl(.48,.48,3.4,new THREE.MeshStandardMaterial({ color:0xd7dfe4, roughness:.95 }),18); silo1.position.set(6.6,1.72,-1.28); campus.add(silo1);
+const silo2 = cyl(.4,.4,2.7,new THREE.MeshStandardMaterial({ color:0xd1d9df, roughness:.95 }),18); silo2.position.set(7.58,1.36,-1.66); campus.add(silo2);
+const bay1 = box(1.28,1.4,.1,new THREE.MeshStandardMaterial({ color:0xcbd4d9, roughness:.82 })); bay1.position.set(-2.75,.87,2.32); campus.add(bay1);
+const bay2 = box(1.28,1.4,.1,new THREE.MeshStandardMaterial({ color:0xcbd4d9, roughness:.82 })); bay2.position.set(-1.05,.87,2.32); campus.add(bay2);
+const bay3 = box(1.28,1.4,.1,new THREE.MeshStandardMaterial({ color:0xcbd4d9, roughness:.82 })); bay3.position.set(.66,.87,2.32); campus.add(bay3);
+const plazaWalk = new THREE.Mesh(new THREE.PlaneGeometry(19,6.2), mats.concrete); plazaWalk.rotation.x = -Math.PI/2; plazaWalk.position.set(.2,.03,5.7); plazaWalk.receiveShadow = true; campus.add(plazaWalk);
+campus.scale.setScalar(.9);
 function cityTree(x,z,s=1){ const g = new THREE.Group(); g.position.set(x,0,z); g.scale.setScalar(s); const trunk = cyl(.07,.1,1.8,new THREE.MeshStandardMaterial({ color:0x6e5844, roughness:1 }),12); trunk.position.set(0,.9,0); g.add(trunk); [[0,2,0,.7],[-.35,1.85,.08,.55],[.35,1.8,.08,.55],[0,2.38,-.05,.45]].forEach(([px,py,pz,r])=>{const c = new THREE.Mesh(new THREE.IcosahedronGeometry(r,2), new THREE.MeshStandardMaterial({ color:0x496756, roughness:.96 })); c.position.set(px,py,pz); c.castShadow = true; g.add(c);}); campus.add(g); }
-cityTree(-9.2,6.1,.95); cityTree(-4.4,6.0,.92); cityTree(5.7,6.2,1); cityTree(9.4,5.8,.88);
+cityTree(-7.8,5.1,.85); cityTree(-3.8,5.0,.82); cityTree(4.9,5.2,.9); cityTree(8.1,4.9,.78);
 
 const bgBlocks = new THREE.Group(); world.add(bgBlocks);
-for(let i=0;i<7;i++){ const h = 7 + Math.random()*12; const w = 2 + Math.random()*2.8; const d = 2 + Math.random()*3.2; const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), new THREE.MeshStandardMaterial({ color:i%2===0?0x12253a:0x1d3248, roughness:.72 })); b.position.set(-17 + i*5.3 + (Math.random()-.5)*1.2, h/2, -7 - Math.random()*8); b.receiveShadow = true; bgBlocks.add(b); }
-for(let i=0;i<6;i++){ const h = 8 + Math.random()*11; const w = 2 + Math.random()*2.4; const d = 2 + Math.random()*2.4; const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), new THREE.MeshStandardMaterial({ color:i%2===0?0x17314a:0x102438, roughness:.7 })); b.position.set(9 + i*4.8 + (Math.random()-.5), h/2, -8 - Math.random()*10); bgBlocks.add(b); }
+for(let i=0;i<6;i++){ const h = 6 + Math.random()*8; const w = 1.8 + Math.random()*2.2; const d = 1.8 + Math.random()*2.6; const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), new THREE.MeshStandardMaterial({ color:i%2===0?0x12253a:0x1d3248, roughness:.72 })); b.position.set(-15 + i*5.8 + (Math.random()-.5), h/2, -11 - Math.random()*7); b.receiveShadow = true; bgBlocks.add(b); }
+for(let i=0;i<5;i++){ const h = 7 + Math.random()*8; const w = 1.8 + Math.random()*2.1; const d = 1.8 + Math.random()*2.1; const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), new THREE.MeshStandardMaterial({ color:i%2===0?0x17314a:0x102438, roughness:.7 })); b.position.set(8.5 + i*5.1 + (Math.random()-.4), h/2, -12 - Math.random()*7); bgBlocks.add(b); }
 
 const hemi = new THREE.HemisphereLight(0xd8e6f1,0x1c1610,1.18); scene.add(hemi);
 const sun = new THREE.DirectionalLight(0xfff3de,4.2); sun.position.set(-12,18,12); sun.castShadow = true; sun.shadow.mapSize.set(window.innerWidth < 760 ? 1024 : 2048, window.innerWidth < 760 ? 1024 : 2048); sun.shadow.camera.left = -34; sun.shadow.camera.right = 34; sun.shadow.camera.top = 26; sun.shadow.camera.bottom = -18; sun.shadow.bias = -.00045; scene.add(sun);
@@ -357,7 +363,7 @@ const smoke1 = new THREE.Points(smokeGeo, mats.smoke); smoke1.position.set(-7.5,
 const smoke2 = new THREE.Points(smokeGeo.clone(), mats.smoke.clone()); smoke2.position.set(-6.2,6.7,-2.1); campus.add(smoke2);
 smoke1.material.opacity = 0; smoke2.material.opacity = 0;
 
-const campusParts = [foundation,hall,hallRoof,hallFront,officeBlock,officeFront,tower,towerCap,towerSign,stack1,stack2,cap1,cap2,pipe1,pipe2,silo1,silo2,bay1,bay2,bay3,plazaWalk];
+const campusParts = [foundation,hall,hallRoof,hallFront,officeBlock,officeFront,tower,towerCap,topSetback,topCap,towerSign,stack1,stack2,cap1,cap2,pipe1,pipe2,silo1,silo2,bay1,bay2,bay3,plazaWalk];
 for(const part of campusParts){ part.userData.baseY = part.position.y; part.scale.set(1,.001,1); part.position.y = 0.02; }
 [...campus.children].forEach(ch => { if(ch !== foundation && ch !== hall && ch !== hallRoof && ch !== hallFront && ch !== officeBlock && ch !== officeFront && ch !== tower && ch !== towerCap && ch !== stack1 && ch !== stack2 && ch !== cap1 && ch !== cap2 && ch !== pipe1 && ch !== pipe2 && ch !== silo1 && ch !== silo2 && ch !== bay1 && ch !== bay2 && ch !== bay3 && ch !== plazaWalk){ ch.scale.set(.001,.001,.001); ch.userData.baseScale = 1; }});
 bgBlocks.scale.set(1,.001,1);
@@ -415,11 +421,11 @@ function animate(){
   const detailsR = easeOut(smooth(p, .64, .90));
   const finalR = smooth(p, .86, .98);
 
-  hut.scale.set(lerp(1,1.12,prep), lerp(1,1.08,prep), lerp(1,1.08,prep));
-  hut.position.y = lerp(0,.16,prep);
-  hut.position.x = lerp(0,-.4,smooth(p,.28,.48));
+  hut.scale.set(lerp(.98,1.04,prep), lerp(.98,1.03,prep), lerp(.98,1.03,prep));
+  hut.position.y = lerp(0,.08,prep);
+  hut.position.x = lerp(0,-.18,smooth(p,.28,.48));
   setOpacity(hutScene, holdHut);
-  forest.position.x = lerp(0,-1.2,smooth(p,.34,.6));
+  forest.position.x = lerp(0,-.7,smooth(p,.34,.6));
   dirt.material.opacity = lerp(1,.18,smooth(p,.55,.88)); dirt.material.transparent = true;
   plaza.material.opacity = lerp(0,1,detailsR);
 
@@ -459,17 +465,17 @@ function animate(){
 
   const camP = smooth(p,.02,.96);
   const mobile = window.innerWidth < 760;
-  const start = mobile ? { x:6.6,y:4.3,z:11.6 } : { x:7.4,y:4.8,z:12.8 };
-  const end   = mobile ? { x:8.2,y:5.8,z:13.4 } : { x:9.0,y:6.6,z:14.8 };
+  const start = mobile ? { x:7.4,y:4.4,z:13.6 } : { x:8.8,y:5.2,z:15.8 };
+  const end   = mobile ? { x:8.5,y:5.4,z:14.8 } : { x:9.7,y:6.2,z:17.4 };
   camera.position.set(
     lerp(start.x,end.x,camP),
     lerp(start.y,end.y,camP),
     lerp(start.z,end.z,camP)
   );
-  camera.lookAt(lerp(0,.25,camP), lerp(1.9,4.8,camP), lerp(.7,.1,camP));
-  world.rotation.y = lerp(-.05,.06,camP);
-  world.position.x = lerp(0,.1,camP);
-  world.position.y = lerp(-.04,0,camP);
+  camera.lookAt(lerp(0,.15,camP), lerp(1.55,3.85,camP), lerp(.55,.08,camP));
+  world.rotation.y = lerp(-.025,.03,camP);
+  world.position.x = lerp(0,0,camP);
+  world.position.y = lerp(-.02,0,camP);
 
   renderer.render(scene, camera);
 }
