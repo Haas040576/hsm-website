@@ -25,9 +25,9 @@ a{color:inherit;text-decoration:none}
 button,input,textarea{font:inherit} button{cursor:pointer}
 .shell{width:var(--shell);margin:0 auto;padding-inline:var(--x)}
 
-.nav{position:fixed;top:0;left:0;right:0;z-index:80;height:78px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--x);mix-blend-mode:difference;color:#fff}
+.nav{position:fixed;top:0;left:0;right:0;z-index:80;height:78px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--x);color:#fff;background:rgba(7,17,27,.94);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 10px 36px rgba(0,0,0,.16)}
 .brand{display:flex;align-items:center;gap:14px;font-weight:700;letter-spacing:-.03em}
-.mark{width:42px;height:42px;border-radius:14px;border:1px solid rgba(255,255,255,.4);display:grid;place-items:center;font:400 16px/1 Georgia,'Times New Roman',serif;letter-spacing:.02em;background:rgba(255,255,255,.08);backdrop-filter:blur(12px)}
+.mark{width:42px;height:42px;border-radius:14px;border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;font:400 16px/1 Georgia,'Times New Roman',serif;letter-spacing:.02em;background:#f7f4ef;color:#0b2034;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .brand small{display:block;margin-top:2px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;opacity:.62}
 .links{display:flex;align-items:center;gap:24px;font-size:12px}.links a{opacity:.78}.links a:hover{opacity:1}
 .navBtn{border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:11px 16px}
@@ -44,7 +44,7 @@ button,input,textarea{font:inherit} button{cursor:pointer}
   linear-gradient(180deg,rgba(0,0,0,.2),transparent 22%,transparent 68%,rgba(0,0,0,.74)),
   radial-gradient(circle at 50% 46%,transparent 20%,rgba(5,11,18,.12) 52%,rgba(5,11,18,.58) 90%);z-index:-2;pointer-events:none}
 .heroNoise{position:absolute;inset:-40%;opacity:.05;pointer-events:none;z-index:-1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.heroIntro{position:absolute;top:98px;left:50%;transform:translateX(-50%);width:min(780px,calc(100vw - 2*var(--x)));text-align:center;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.58)}
+.heroIntro{position:absolute;top:98px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 2*var(--x));padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(7,17,27,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 36px rgba(0,0,0,.18);text-align:center;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);white-space:nowrap;z-index:4}
 .heroCopy{position:absolute;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));width:min(900px,calc(100vw - 2*var(--x)));padding:clamp(24px,3vw,34px) clamp(22px,3.3vw,40px);border-radius:28px;border:1px solid rgba(255,255,255,.18);background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.06));backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);box-shadow:0 30px 90px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.18);transform:translateX(-50%) translateY(calc((1 - clamp(0, (var(--hero-progress) - .92) / .06, 1))*50px));opacity:clamp(0, (var(--hero-progress) - .92) / .06, 1);filter:blur(calc((1 - clamp(0, (var(--hero-progress) - .92) / .06, 1))*8px));transition:transform .1s linear,opacity .1s linear,filter .1s linear;text-align:center;overflow:hidden}
 .heroEyebrow{margin:0 0 18px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.66)}
 .hero h1{margin:0;font:400 clamp(48px,7.2vw,118px)/.9 Georgia,'Times New Roman',serif;letter-spacing:-.06em;text-wrap:balance}
@@ -52,9 +52,6 @@ button,input,textarea{font:inherit} button{cursor:pointer}
 .actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:28px}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid transparent}
 .btnLight{background:#fff;color:#09131d}.btnGhost{border-color:rgba(255,255,255,.38);color:#fff}
-.scrollMeter{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);display:grid;grid-template-columns:1fr 38px;align-items:center;gap:14px;width:min(360px,calc(100vw - 44px));font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.54)}
-.scrollLine{height:1px;background:rgba(255,255,255,.16);overflow:hidden}.scrollLine i{display:block;width:100%;height:100%;background:#fff;transform-origin:left;transform:scaleX(.02)}
-.scrollMeter b{font:400 16px Georgia,'Times New Roman',serif;color:#fff;text-align:right;letter-spacing:0}
 
 .section{padding:clamp(92px,11vw,168px) 0}
 .kicker{margin:0 0 16px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#436b91}
@@ -76,7 +73,7 @@ footer{display:flex;justify-content:space-between;gap:20px;align-items:center;pa
 
 @media (max-width: 980px){
   .links{display:none}.hamb{display:block}.mob{position:fixed;inset:72px 20px auto 20px;display:grid;gap:10px;padding:18px;border-radius:18px;background:rgba(9,18,28,.95);backdrop-filter:blur(18px);transform:translateY(-12px);opacity:0;pointer-events:none;transition:.24s;z-index:79}.menuOpen .mob{opacity:1;transform:none;pointer-events:auto}.mob a{color:#fff;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.04);font-size:14px}
-  .hero{height:500vh}.heroIntro{top:92px;width:calc(100vw - 40px)}.heroCopy{width:calc(100vw - 32px);bottom:112px;padding:22px 18px;border-radius:22px}.hero h1{font-size:clamp(44px,12vw,68px)}.heroLead{font-size:15px;line-height:1.58}.actions{gap:10px}.scrollMeter{width:min(330px,calc(100vw - 40px))}
+  .hero{height:500vh}.heroIntro{top:92px;max-width:calc(100vw - 40px);width:max-content;font-size:9px;padding:9px 13px;white-space:normal;line-height:1.4}.heroCopy{width:calc(100vw - 32px);bottom:112px;padding:22px 18px;border-radius:22px}.hero h1{font-size:clamp(44px,12vw,68px)}.heroLead{font-size:15px;line-height:1.58}.actions{gap:10px}
   .introGrid,.analysisWrap,.servicesHead,.project,.contactGrid{grid-template-columns:1fr;gap:52px}.fields{grid-template-columns:1fr}.service{grid-template-columns:46px 1fr auto}.service p{grid-column:2/4}.projectsTop{display:grid}.founders{grid-template-columns:1fr}.contactCards b{font-size:24px}
 }
 @media (max-width: 640px){
@@ -113,7 +110,6 @@ footer{display:flex;justify-content:space-between;gap:20px;align-items:center;pa
       <p class="heroLead">Wir entwickeln Auftritte, Kommunikation und digitale Systeme so, dass aus einem kleinen Betrieb eine Marke mit erkennbarem Gewicht wird.</p>
       <div class="actions"><a class="btn btnLight" href="#analyse">Kostenlosen Digital-Check starten</a><a class="btn btnGhost" href="#projekte">Arbeiten ansehen</a></div>
     </div>
-    <div class="scrollMeter"><div class="scrollLine"><i id="meterFill"></i></div><b id="meterPct">00</b></div>
   </div>
 </section>
 
@@ -156,8 +152,6 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
 const root = document.documentElement;
 const hero = document.querySelector('.hero');
 const canvasHost = document.getElementById('heroCanvas');
-const meterFill = document.getElementById('meterFill');
-const meterPct = document.getElementById('meterPct');
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const clamp = (v, a=0, b=1) => Math.max(a, Math.min(b, v));
@@ -378,8 +372,6 @@ function updateProgress(){
   const max = Math.max(1, hero.offsetHeight - window.innerHeight);
   target = reduced ? 1 : clamp(-rect.top / max);
   root.style.setProperty('--hero-progress', target.toFixed(4));
-  meterFill.style.transform = `scaleX(${Math.max(.02,target)})`;
-  meterPct.textContent = String(Math.round(target*100)).padStart(2,'0');
 }
 window.addEventListener('scroll', updateProgress, { passive:true });
 window.addEventListener('resize', () => {
