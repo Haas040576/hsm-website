@@ -82,6 +82,106 @@ footer{display:flex;justify-content:space-between;gap:20px;align-items:center;pa
   .brand span{display:none}.mark{width:40px;height:40px}.hero{height:470vh}.heroCopy{bottom:120px;padding:20px 16px;border-radius:20px}.display{font-size:42px}.yellowMock,.charMock{height:250px}.projectInfo p{font-size:17px}footer{flex-direction:column;align-items:flex-start}
 }
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.hero{height:140vh}.heroSticky{position:relative}.heroIntro{--intro-in:1;filter:none}.heroCopy{opacity:1;transform:translateX(-50%);filter:none}}
+
+/* HSM website build-out */
+body{background:var(--paper)}
+.nav{transition:background .25s ease,border-color .25s ease,box-shadow .25s ease}
+.links a{position:relative}
+.links a::after{content:'';position:absolute;left:0;right:100%;bottom:-7px;height:1px;background:#fff;transition:right .25s ease}
+.links a:hover::after{right:0}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal.is-visible{opacity:1;transform:none}
+.revealDelay{transition-delay:.12s}
+
+.introStatement{margin-top:34px;padding-top:34px;border-top:1px solid var(--line);font:500 clamp(30px,4vw,60px)/1.08 'Satoshi',sans-serif;letter-spacing:-.035em;color:var(--ink)}
+
+.checkLaunch{padding:0 0 clamp(92px,10vw,150px);background:var(--paper)}
+.checkBanner{position:relative;overflow:hidden;min-height:470px;border-radius:38px;background:
+  radial-gradient(circle at 14% 18%,rgba(104,160,207,.24),transparent 32%),
+  radial-gradient(circle at 88% 76%,rgba(66,122,171,.18),transparent 34%),
+  linear-gradient(145deg,#071421,#0b2136 52%,#0d2d49);color:#fff;border:1px solid rgba(255,255,255,.1);box-shadow:0 46px 120px rgba(8,21,34,.2);isolation:isolate}
+.checkBanner::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(90deg,transparent,black 30%,black 75%,transparent);opacity:.45;z-index:-2}
+.checkBanner::after{content:'';position:absolute;top:-20%;bottom:-20%;width:34%;left:-42%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);transform:skewX(-14deg);animation:bannerSweep 7s ease-in-out infinite;z-index:-1}
+@keyframes bannerSweep{0%,22%{left:-42%}64%,100%{left:118%}}
+.checkBannerGrid{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(38px,6vw,86px);align-items:center;padding:clamp(34px,5.5vw,76px)}
+.checkBadge{display:inline-flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(255,255,255,.07);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+.checkBadge i{width:8px;height:8px;border-radius:50%;background:#8ec5ed;box-shadow:0 0 0 0 rgba(142,197,237,.5);animation:pulseDot 2.4s ease-out infinite}
+@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(142,197,237,.45)}70%,100%{box-shadow:0 0 0 9px rgba(142,197,237,0)}}
+.checkBanner h2{margin:24px 0 0;font:500 clamp(44px,5.7vw,82px)/.96 'Satoshi',sans-serif;letter-spacing:-.045em;max-width:760px}
+.checkBannerLead{margin:24px 0 0;max-width:650px;font-size:clamp(16px,1.35vw,20px);line-height:1.65;color:rgba(255,255,255,.72)}
+.checkPoints{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.checkPoints span{padding:10px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);font-size:12px;color:rgba(255,255,255,.75)}
+.checkActions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.checkSecondary{padding:14px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.24);font-size:12px;color:#fff}
+.auditVisual{position:relative;min-height:330px;border-radius:28px;border:1px solid rgba(255,255,255,.13);background:rgba(4,13,22,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 28px 70px rgba(0,0,0,.24);overflow:hidden}
+.auditTop{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid rgba(255,255,255,.09);font-size:11px;color:rgba(255,255,255,.62)}
+.auditTop b{font-weight:600;color:#fff}.auditStatus{display:flex;align-items:center;gap:8px}.auditStatus i{width:7px;height:7px;border-radius:50%;background:#83c8a6}
+.auditBody{padding:22px}
+.auditScore{display:flex;align-items:end;justify-content:space-between;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.09)}
+.auditScore strong{font-size:54px;line-height:1;font-weight:500;letter-spacing:-.05em}.auditScore span{font-size:11px;color:rgba(255,255,255,.54);text-align:right;line-height:1.5}
+.auditRows{display:grid;gap:17px;margin-top:22px}.auditRow{display:grid;grid-template-columns:125px 1fr 34px;gap:12px;align-items:center;font-size:11px;color:rgba(255,255,255,.66)}
+.auditTrack{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}.auditTrack i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#6696bd,#b5d8ef);transform-origin:left;animation:scoreGrow 3.2s cubic-bezier(.2,.7,.2,1) infinite alternate}
+.auditRow:nth-child(2) .auditTrack i{animation-delay:.35s}.auditRow:nth-child(3) .auditTrack i{animation-delay:.7s}.auditRow:nth-child(4) .auditTrack i{animation-delay:1.05s}
+@keyframes scoreGrow{from{transform:scaleX(.45)}to{transform:scaleX(1)}}
+.auditScan{position:absolute;left:0;right:0;height:1px;top:60px;background:linear-gradient(90deg,transparent,#c7e9ff,transparent);box-shadow:0 0 22px rgba(157,214,250,.8);animation:scanMove 4s ease-in-out infinite}
+@keyframes scanMove{0%,10%{top:60px;opacity:0}20%{opacity:1}75%{top:96%;opacity:1}88%,100%{top:96%;opacity:0}}
+
+.serviceCards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:64px}
+.serviceCard{position:relative;min-height:430px;padding:32px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#fff,#f4f5f4);overflow:hidden;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.serviceCard:hover{transform:translateY(-6px);box-shadow:0 28px 65px rgba(8,21,34,.1);border-color:rgba(8,21,34,.22)}
+.serviceCard::after{content:'';position:absolute;width:190px;height:190px;border-radius:50%;right:-80px;top:-80px;background:radial-gradient(circle,rgba(57,102,142,.16),transparent 70%)}
+.serviceNo{display:inline-flex;width:42px;height:42px;border-radius:50%;align-items:center;justify-content:center;background:#0b2034;color:#fff;font-size:12px}
+.serviceCard h3{margin:30px 0 0;font-size:clamp(30px,3vw,46px);line-height:1.02;letter-spacing:-.04em;font-weight:500}
+.serviceCard>p{margin:20px 0 0;color:#68737c;line-height:1.65;font-size:15px}
+.serviceBullets{display:grid;gap:12px;margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
+.serviceBullets span{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45;color:#4e5b65}.serviceBullets span::before{content:'↗';color:#3d678b}
+
+.method{background:#edf0f1}
+.methodHead{display:grid;grid-template-columns:1fr .85fr;gap:8vw;align-items:end}
+.methodHead .copy{margin-bottom:5px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:64px}
+.step{min-height:285px;padding:26px;border-radius:24px;background:#fbfaf7;border:1px solid rgba(8,21,34,.1)}
+.stepNo{font-size:11px;letter-spacing:.16em;color:#4b7192}.step h3{margin:68px 0 0;font-size:26px;font-weight:500;letter-spacing:-.03em}.step p{margin:13px 0 0;color:#68737c;font-size:14px;line-height:1.62}
+
+.projectPlaceholder{position:relative;height:360px;border-radius:28px;overflow:hidden;background:linear-gradient(145deg,#eff2f3,#c7d0d6);border:1px solid rgba(255,255,255,.15)}
+.projectPlaceholder::before{content:'';position:absolute;inset:18px;border-radius:20px;border:1px solid rgba(8,21,34,.13);background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.22))}
+.projectPlaceholder::after{content:'Projektansicht folgt';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#61717d}
+.projectPlaceholder.dark{background:linear-gradient(145deg,#1b3349,#071421)}
+.projectPlaceholder.dark::before{border-color:rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.015))}
+.projectPlaceholder.dark::after{color:rgba(255,255,255,.55)}
+.projectMeta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.projectMeta span{padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.12);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.62)}
+
+.whyGrid{display:grid;grid-template-columns:.9fr 1.1fr;gap:8vw;align-items:start}
+.whyList{display:grid;gap:0;border-top:1px solid var(--line)}
+.whyItem{display:grid;grid-template-columns:54px 1fr;gap:18px;padding:26px 0;border-bottom:1px solid var(--line)}
+.whyItem span{font-size:11px;color:#4c7392}.whyItem h3{margin:0;font-size:24px;font-weight:500;letter-spacing:-.03em}.whyItem p{margin:8px 0 0;color:#6a747d;line-height:1.6;font-size:14px}
+
+.booking{background:#dfe6ea}
+.bookingCard{display:grid;grid-template-columns:1fr .9fr;gap:8vw;align-items:center;padding:clamp(34px,5vw,72px);border-radius:36px;background:#fbfaf7;box-shadow:0 34px 90px rgba(8,21,34,.11)}
+.bookingModes{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.bookingModes span{padding:10px 13px;border-radius:999px;background:#edf0f1;border:1px solid rgba(8,21,34,.08);font-size:12px;color:#4e5b64}
+.bookingFacts{display:grid;gap:14px}.bookingFact{display:flex;justify-content:space-between;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}.bookingFact small{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7d878e}.bookingFact b{font-size:15px;font-weight:600;text-align:right}
+
+.founder{min-height:500px}.portrait{position:relative;overflow:hidden}.portrait::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 25%,rgba(255,255,255,.26),transparent 40%)}
+.founderRole{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.founderRole span{padding:7px 10px;border-radius:999px;background:rgba(8,21,34,.06);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#65727b}
+
+.footerLinks{display:flex;gap:18px}.footerLinks a{opacity:.8}.footerLinks a:hover{opacity:1}
+
+@media(max-width:980px){
+  .checkBannerGrid,.methodHead,.whyGrid,.bookingCard{grid-template-columns:1fr}
+  .serviceCards{grid-template-columns:1fr}
+  .serviceCard{min-height:0}
+  .steps{grid-template-columns:1fr 1fr}
+  .projectPlaceholder{height:300px}
+}
+@media(max-width:640px){
+  .checkBanner{border-radius:26px}.checkBannerGrid{padding:28px 20px}.checkBanner h2{font-size:42px}.auditVisual{min-height:305px}.auditRow{grid-template-columns:100px 1fr 28px}
+  .steps{grid-template-columns:1fr}.step{min-height:230px}.step h3{margin-top:44px}
+  .serviceCard{padding:26px;border-radius:22px}.bookingCard{padding:28px 20px;border-radius:26px}
+  .projectPlaceholder{height:240px}.footerLinks{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){.checkBanner::after,.checkBadge i,.auditTrack i,.auditScan{animation:none}.reveal{opacity:1;transform:none;transition:none}}
+
 </style>
 </head>
 <body>
@@ -91,13 +191,16 @@ footer{display:flex;justify-content:space-between;gap:20px;align-items:center;pa
     <a href="#leistungen">Leistungen</a>
     <a href="#analyse">Digital-Check</a>
     <a href="#projekte">Projekte</a>
+    <a href="#vorgehen">Vorgehen</a>
     <a href="#agentur">Agentur</a>
     <a href="#kontakt">Kontakt</a>
-    <a class="navBtn" href="#kontakt">Erstgespräch</a>
+    <a class="navBtn" href="#beratung">Erstgespräch</a>
   </div>
-  <button class="hamb" id="hamb">☰</button>
+  <button class="hamb" id="hamb" aria-label="Menü öffnen">☰</button>
 </nav>
-<div class="mob" id="mob"><a href="#leistungen">Leistungen</a><a href="#analyse">Digital-Check</a><a href="#projekte">Projekte</a><a href="#agentur">Agentur</a><a href="#kontakt">Kontakt</a></div>
+<div class="mob" id="mob">
+  <a href="#leistungen">Leistungen</a><a href="#analyse">Digital-Check</a><a href="#projekte">Projekte</a><a href="#vorgehen">Vorgehen</a><a href="#agentur">Agentur</a><a href="#kontakt">Kontakt</a>
+</div>
 
 <section class="hero" id="top">
   <div class="heroSticky">
@@ -109,44 +212,146 @@ footer{display:flex;justify-content:space-between;gap:20px;align-items:center;pa
     <div class="heroCopy">
       <p class="heroEyebrow">Haas &amp; Saida Media</p>
       <h1>Wir verändern, wie Unternehmen wahrgenommen werden.</h1>
-      <p class="heroLead">Wir entwickeln Auftritte, Kommunikation und digitale Systeme so, dass aus einem kleinen Betrieb eine Marke mit erkennbarem Gewicht wird.</p>
-      <div class="actions"><a class="btn btnLight" href="#analyse">Kostenlosen Digital-Check starten</a><a class="btn btnGhost" href="#projekte">Arbeiten ansehen</a></div>
+      <p class="heroLead">Wir entwickeln Websites, digitale Auftritte und intelligente Systeme, die den Wert eines Unternehmens sichtbar machen und Wachstum praktisch unterstützen.</p>
+      <div class="actions"><a class="btn btnLight" href="#analyse">Kostenlosen Digital-Check starten</a><a class="btn btnGhost" href="#leistungen">Leistungen ansehen</a></div>
     </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="shell introGrid">
-    <div><p class="kicker">Nicht mehr Präsenz. Mehr Wirkung.</p><h2 class="display">Ein Auftritt ist kein Schmuckstück. Er ist ein Versprechen.</h2></div>
-    <div><p class="copy">Menschen entscheiden in wenigen Sekunden, ob ein Unternehmen modern, vertrauenswürdig und relevant wirkt. Wir sorgen dafür, dass Website, Social Media und digitale Abläufe dieselbe klare Geschichte erzählen.</p><p class="copy" style="margin-top:30px;font:500 clamp(28px,3.8vw,62px)/1.08 'Satoshi',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:-.035em;color:var(--ink)">Was Ihr Unternehmen leistet, soll man sehen – bevor das erste Gespräch beginnt.</p></div>
+  <div class="shell introGrid reveal">
+    <div><p class="kicker">Nicht mehr Präsenz. Mehr Wirkung.</p><h2 class="display">Ein starker Auftritt beginnt mit einer klaren Wahrnehmung.</h2></div>
+    <div><p class="copy">Menschen entscheiden innerhalb weniger Sekunden, ob ein Unternehmen modern, vertrauenswürdig und relevant wirkt. Deshalb verbinden wir Gestaltung, Kommunikation und Technik zu einem Auftritt, der nicht nur gut aussieht, sondern nachvollziehbar funktioniert.</p><p class="introStatement">Was Ihr Unternehmen leistet, soll man sehen – bevor das erste Gespräch beginnt.</p></div>
+  </div>
+</section>
+
+<section class="checkLaunch" aria-labelledby="check-title">
+  <div class="shell">
+    <div class="checkBanner reveal">
+      <div class="checkBannerGrid">
+        <div>
+          <div class="checkBadge"><i></i> HSM Digital Check</div>
+          <h2 id="check-title">Wo verliert Ihr digitaler Auftritt gerade Wirkung?</h2>
+          <p class="checkBannerLead">Wir prüfen die wichtigsten Kontaktpunkte Ihres Unternehmens und zeigen Ihnen, was bereits funktioniert, wo Potenzial liegen bleibt und welche nächsten Schritte am meisten Wirkung entfalten können.</p>
+          <div class="checkPoints"><span>Website</span><span>Social Media</span><span>Positionierung</span><span>Kontaktwege</span></div>
+          <div class="checkActions"><a class="btn btnLight" href="#analyse">Kostenlosen Kurz-Check starten</a><a class="checkSecondary" href="#leistungen">Was wird geprüft?</a></div>
+        </div>
+        <div class="auditVisual" aria-hidden="true">
+          <div class="auditScan"></div>
+          <div class="auditTop"><b>Digitale Kurzanalyse</b><div class="auditStatus"><i></i> Analyse aktiv</div></div>
+          <div class="auditBody">
+            <div class="auditScore"><strong>73</strong><span>aktueller<br>Wirkungswert</span></div>
+            <div class="auditRows">
+              <div class="auditRow"><span>Markenwirkung</span><div class="auditTrack"><i style="width:78%"></i></div><b>78</b></div>
+              <div class="auditRow"><span>Nutzerführung</span><div class="auditTrack"><i style="width:64%"></i></div><b>64</b></div>
+              <div class="auditRow"><span>Vertrauen</span><div class="auditTrack"><i style="width:82%"></i></div><b>82</b></div>
+              <div class="auditRow"><span>Kontaktfluss</span><div class="auditTrack"><i style="width:59%"></i></div><b>59</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="section analysis" id="analyse">
   <div class="shell analysisWrap">
-    <div><p class="kicker">Kostenloser Digital-Check</p><h2 class="analysisTitle">Wo verliert Ihr Auftritt Wirkung?</h2><p class="analysisText">Wir prüfen Website, Social Media und digitale Kontaktpunkte. Sie erhalten eine klare Ersteinschätzung: Was funktioniert, was bremst und welche nächsten Schritte sinnvoll wären. Ohne Verkaufstrick und ohne pauschale Paketpreise.</p><div class="valueList"><div><b>Konkrete Schwachstellen</b><span>statt allgemeiner Floskeln</span></div><div><b>Priorisierte Empfehlungen</b><span>nach Wirkung und Aufwand</span></div><div><b>Individueller Preisrahmen</b><span>nach manueller Prüfung</span></div></div></div>
-    <form class="panel demoForm"><div class="panelTop"><b>Digital-Check anfragen</b><span>0 €</span></div><div class="fields"><div class="field"><label>Name</label><input required /></div><div class="field"><label>Unternehmen</label><input required /></div><div class="field full"><label>Website oder Social-Media-Profil</label><input placeholder="https://" /></div><div class="field"><label>E-Mail</label><input type="email" required /></div><div class="field"><label>Telefon</label><input type="tel" /></div><div class="field full"><label>Was möchten Sie verbessern?</label><textarea required></textarea></div></div><button class="btn" style="width:100%;margin-top:24px;background:var(--ink);color:#fff" type="submit">Kostenlose Einschätzung anfordern</button><p class="formnote">Vorschau-Modus: Die Anfrage wird noch nicht versendet.</p></form>
+    <div class="reveal"><p class="kicker">Kostenlose Ersteinschätzung</p><h2 class="analysisTitle">Eine klare Analyse statt allgemeiner Floskeln.</h2><p class="analysisText">Sie erhalten eine erste, verständliche Einschätzung zu Ihrem digitalen Auftritt. Auch Unternehmen ohne bestehende Website können den Check nutzen.</p><div class="valueList"><div><b>Konkrete Schwachstellen</b><span>sichtbar und nachvollziehbar</span></div><div><b>Priorisierte Empfehlungen</b><span>nach Wirkung und Aufwand</span></div><div><b>Individueller Preisrahmen</b><span>erst nach manueller Prüfung</span></div></div></div>
+    <form class="panel demoForm reveal revealDelay">
+      <div class="panelTop"><b>Digital-Check anfragen</b><span>Kostenlos</span></div>
+      <div class="fields">
+        <div class="field"><label>Name</label><input required /></div>
+        <div class="field"><label>Unternehmen</label><input required /></div>
+        <div class="field full"><label>Website oder Social-Media-Profil</label><input placeholder="Optional – auch ohne Website möglich" /></div>
+        <div class="field"><label>Branche</label><input required /></div>
+        <div class="field"><label>Telefon</label><input type="tel" /></div>
+        <div class="field full"><label>E-Mail</label><input type="email" required /></div>
+        <div class="field full"><label>Was möchten Sie verbessern?</label><textarea required placeholder="Zum Beispiel: mehr Anfragen, modernerer Auftritt, bessere Abläufe …"></textarea></div>
+      </div>
+      <button class="btn" style="width:100%;margin-top:24px;background:var(--ink);color:#fff" type="submit">Kostenlose Einschätzung anfordern</button>
+      <p class="formnote">Vorschau-Modus: Die Anfrage wird noch nicht versendet.</p>
+    </form>
   </div>
 </section>
 
 <section class="section" id="leistungen">
-  <div class="shell"><div class="servicesHead"><div><p class="kicker">Leistungen</p><h2 class="display">Ein System statt einzelner Maßnahmen.</h2></div><p class="copy">Wir bauen nicht einfach Inhalte, Seiten oder Automationen. Wir verbinden die relevanten Berührungspunkte so, dass ein Unternehmen nach außen klarer und im Hintergrund effizienter arbeitet.</p></div><div class="servicesList"><article class="service"><span>01</span><h3>Websites</h3><p>Neue Websites, Redesigns und digitale Auftritte mit klarer Struktur, hochwertiger Gestaltung und technischer Substanz.</p><div class="circle">↗</div></article><article class="service"><span>02</span><h3>Social Media Betreuung</h3><p>Planung, Gestaltung und laufende Betreuung für einen konsistenten, professionellen Markenauftritt.</p><div class="circle">↗</div></article><article class="service"><span>03</span><h3>KI &amp; Automatisierung</h3><p>Sinnvolle Automationen für Anfragen, Auswertung, Kommunikation und wiederkehrende Abläufe.</p><div class="circle">↗</div></article><article class="service"><span>04</span><h3>Interne Systeme</h3><p>CRM-Systeme, Dashboards und interne Web-Apps, die echte Arbeitsabläufe vereinfachen.</p><div class="circle">↗</div></article></div></div>
+  <div class="shell">
+    <div class="servicesHead reveal"><div><p class="kicker">Leistungen</p><h2 class="display">Drei Bereiche. Ein gemeinsamer Auftritt.</h2></div><p class="copy">Wir verbinden die sichtbare Außendarstellung mit den digitalen Abläufen dahinter. So entstehen keine einzelnen Maßnahmen, sondern ein System, das zum Unternehmen passt.</p></div>
+    <div class="serviceCards">
+      <article class="serviceCard reveal"><span class="serviceNo">01</span><h3>Webdesign</h3><p>Individuelle Websites und Redesigns, die hochwertig wirken, verständlich aufgebaut sind und auf allen Geräten sauber funktionieren.</p><div class="serviceBullets"><span>Neue Websites und vollständige Redesigns</span><span>Interaktive Scroll- und 3D-Erlebnisse</span><span>Technische Veröffentlichung und Einrichtung</span></div></article>
+      <article class="serviceCard reveal revealDelay"><span class="serviceNo">02</span><h3>Social Media &amp; digitale Auftritte</h3><p>Ein konsistenter Markenauftritt über Website, soziale Netzwerke, Inhalte und digitale Kontaktpunkte hinweg.</p><div class="serviceBullets"><span>Social-Media-Betreuung und Content</span><span>Digitale Werbemittel und Kampagnen</span><span>Klare Markenkommunikation</span></div></article>
+      <article class="serviceCard reveal"><span class="serviceNo">03</span><h3>KI-Beratung &amp; Systeme</h3><p>Praktische KI-Lösungen und interne Systeme, die Kommunikation vereinfachen und wiederkehrende Arbeit reduzieren.</p><div class="serviceBullets"><span>KI-Assistenten und Automatisierungen</span><span>CRM, Dashboards und Mitarbeiter-Apps</span><span>Termin- und Kommunikationssysteme</span></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="section method" id="vorgehen">
+  <div class="shell">
+    <div class="methodHead reveal"><div><p class="kicker">Vorgehen</p><h2 class="display">Klar im Prozess. Individuell im Ergebnis.</h2></div><p class="copy">Sie sprechen direkt mit den Menschen, die Ihr Projekt verstehen und umsetzen. Entscheidungen bleiben nachvollziehbar, der Ablauf bleibt schlank.</p></div>
+    <div class="steps">
+      <article class="step reveal"><span class="stepNo">01 · Verstehen</span><h3>Ausgangslage klären</h3><p>Wir erfassen Ziele, Zielgruppen, bisherige Maßnahmen und die Stellen, an denen aktuell Wirkung verloren geht.</p></article>
+      <article class="step reveal revealDelay"><span class="stepNo">02 · Verdichten</span><h3>Richtung festlegen</h3><p>Aus den Informationen entsteht ein klares Konzept – ohne unnötige Funktionen und ohne beliebige Gestaltung.</p></article>
+      <article class="step reveal"><span class="stepNo">03 · Umsetzen</span><h3>Auftritt entwickeln</h3><p>Design, Inhalte und Technik werden als zusammenhängendes System entwickelt, getestet und sauber vorbereitet.</p></article>
+      <article class="step reveal revealDelay"><span class="stepNo">04 · Weiterentwickeln</span><h3>Nach dem Start wachsen</h3><p>Inhalte, Betreuung und Automatisierungen können anschließend gezielt erweitert werden.</p></article>
+    </div>
+  </div>
 </section>
 
 <section class="section projects" id="projekte">
-  <div class="shell"><div class="projectsTop"><div><p class="kicker" style="color:#9eb8cd">Ausgewählte Arbeiten</p><h2 class="display">Arbeit, die sich nicht erklären muss.</h2></div><p>Zwei unterschiedliche Marken, zwei individuelle Systeme. Keine Schablonen, sondern Lösungen, die aus dem jeweiligen Unternehmen heraus entwickelt wurden.</p></div><div class="projectGrid"><article class="project"><div class="mock"><div class="mockBar"><i></i><i></i><i></i><span>yellow-drive.de</span></div><div class="yellowMock"><p>Driving school redefined</p><h4>Drive into your future.</h4></div></div><div class="projectInfo"><h3>Yellow Drive</h3><p>Ein selbstbewusster digitaler Auftritt für eine moderne Fahrschule – klar, schnell und auf eine junge Zielgruppe zugeschnitten.</p><span>Live-Link folgt</span></div></article><article class="project"><div class="mock"><div class="mockBar"><i></i><i></i><i></i><span>das-charlies.de</span></div><div class="charMock"><p>Café · Bar · Osteria</p><h4>Your new favourite place.</h4></div></div><div class="projectInfo"><h3>Das Charlies</h3><p>Ein warmer, hochwertiger Auftritt zwischen Café, Bar und Osteria – entwickelt, um Atmosphäre bereits vor dem Besuch spürbar zu machen.</p><span>Live-Link folgt</span></div></article></div></div>
+  <div class="shell">
+    <div class="projectsTop reveal"><div><p class="kicker" style="color:#9eb8cd">Ausgewählte Arbeiten</p><h2 class="display">Projekte mit eigener Handschrift.</h2></div><p>Die finalen Bilder, Texte und Projektbeispiele werden später ergänzt. Die Struktur ist bereits vorbereitet.</p></div>
+    <div class="projectGrid">
+      <article class="project reveal"><div class="projectPlaceholder"></div><div class="projectInfo"><h3>Yellow Drive</h3><p>Moderner digitaler Auftritt für eine Fahrschule. Details, Bildmaterial und finale Projektbeschreibung folgen.</p><div class="projectMeta"><span>Webdesign</span><span>Digitale Marke</span><span>Mobile Experience</span></div></div></article>
+      <article class="project reveal"><div class="projectPlaceholder dark"></div><div class="projectInfo"><h3>Das Charlies</h3><p>Hochwertiger Auftritt für Café, Bar und Osteria. Details, Bildmaterial und finale Projektbeschreibung folgen.</p><div class="projectMeta"><span>Webdesign</span><span>Gastronomie</span><span>Mehrsprachig</span></div></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell whyGrid">
+    <div class="reveal"><p class="kicker">Warum HSM</p><h2 class="display">Nicht größer wirken als wir sind. Besser arbeiten, weil wir nah dran sind.</h2><p class="copy">Keine anonyme Projektkette, keine Standardpakete und keine künstlich aufgeblähte Agenturstruktur.</p></div>
+    <div class="whyList reveal revealDelay">
+      <div class="whyItem"><span>01</span><div><h3>Direkte Ansprechpartner</h3><p>Sie sprechen mit den Personen, die Ihr Projekt planen und tatsächlich umsetzen.</p></div></div>
+      <div class="whyItem"><span>02</span><div><h3>Individuelle Lösungen</h3><p>Gestaltung und Technik richten sich nach Ihrem Unternehmen – nicht nach einer fertigen Schablone.</p></div></div>
+      <div class="whyItem"><span>03</span><div><h3>Sauberer technischer Start</h3><p>Wir begleiten Domain, Veröffentlichung und Einrichtung. Laufende externe Kosten zahlen Kunden direkt beim jeweiligen Anbieter.</p></div></div>
+    </div>
+  </div>
 </section>
 
 <section class="section" id="agentur">
-  <div class="shell"><div class="aboutTop"><p class="kicker">Haas &amp; Saida Media</p><h2 class="display">Zwei Perspektiven. Eine klare Verantwortung.</h2><p class="copy">Strategie, Entwicklung und Gestaltung bleiben bei uns eng verbunden. Kunden sprechen direkt mit den Menschen, die das Projekt verstehen und umsetzen.</p></div><div class="founders"><article class="founder"><div class="portrait"><div class="monogram">MH</div></div><div class="founderInfo"><h3>Maximilian Haas</h3><a href="tel:+491713177920">↗</a><p>Webentwicklung · Kundenbetreuung · Vertrieb</p></div></article><article class="founder"><div class="portrait" style="background:linear-gradient(145deg,#d7dee2,#607b8f)"><div class="monogram">LS</div></div><div class="founderInfo"><h3>Leander Saida</h3><a href="tel:+491792690310">↗</a><p>Webentwicklung · Design</p></div></article></div></div>
+  <div class="shell">
+    <div class="aboutTop reveal"><p class="kicker">Haas &amp; Saida Media</p><h2 class="display">Zwei Perspektiven. Eine klare Verantwortung.</h2><p class="copy">Strategie, Entwicklung und Gestaltung bleiben bei uns eng verbunden. Kunden sprechen direkt mit den Menschen, die das Projekt verstehen und umsetzen.</p></div>
+    <div class="founders">
+      <article class="founder reveal"><div class="portrait"><div class="monogram">MH</div></div><div class="founderInfo"><h3>Maximilian Haas</h3><a href="tel:+491713177920">↗</a><p>Webentwicklung · Kundenbetreuung · Vertrieb</p><div class="founderRole"><span>Strategie</span><span>Umsetzung</span><span>Kommunikation</span></div></div></article>
+      <article class="founder reveal revealDelay"><div class="portrait" style="background:linear-gradient(145deg,#d7dee2,#607b8f)"><div class="monogram">LS</div></div><div class="founderInfo"><h3>Leander Saida</h3><a href="tel:+491792690310">↗</a><p>Webentwicklung · Design</p><div class="founderRole"><span>Design</span><span>Entwicklung</span><span>Markenbild</span></div></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="section booking" id="beratung">
+  <div class="shell">
+    <div class="bookingCard reveal">
+      <div><p class="kicker">Kostenloses Erstgespräch</p><h2 class="display">45 Minuten für eine klare erste Richtung.</h2><p class="copy">Wir besprechen, wo Ihr Unternehmen steht, welche Maßnahmen sinnvoll wären und ob eine Zusammenarbeit fachlich und menschlich passt.</p><div class="bookingModes"><span>Telefon</span><span>Videoanruf</span><span>Persönlich in Murnau</span></div><div style="margin-top:28px"><a class="btn demoAction" style="background:var(--ink);color:#fff" href="#">Gespräch vormerken</a></div></div>
+      <div class="bookingFacts"><div class="bookingFact"><small>Dauer</small><b>45 Minuten</b></div><div class="bookingFact"><small>Kosten</small><b>Kostenlos</b></div><div class="bookingFact"><small>Vorbereitung</small><b>Keine Präsentation nötig</b></div><div class="bookingFact"><small>Terminwahl</small><b>Später direkt online</b></div></div>
+    </div>
+  </div>
 </section>
 
 <section class="section contact" id="kontakt">
-  <div class="shell contactGrid"><div><p class="kicker" style="color:#9eb8cd">Erstes Gespräch</p><h2>Lassen Sie uns Ihren nächsten Auftritt bauen.</h2><p>45 Minuten, kostenlos und ohne vorbereitete Verkaufsshow. Wir sprechen darüber, wo Ihr Unternehmen steht und welche Maßnahmen wirklich sinnvoll wären.</p><div class="actions" style="justify-content:flex-start"><a class="btn btnLight demoAction">Kostenloses Gespräch vormerken</a><a class="btn btnGhost" href="mailto:haassaida@gmail.com">E-Mail schreiben</a></div></div><div class="contactCards"><a href="tel:+491713177920"><div><small>Maximilian Haas</small><b>+49 171 3177920</b></div><span>↗</span></a><a href="tel:+491792690310"><div><small>Leander Saida</small><b>+49 179 2690310</b></div><span>↗</span></a><a href="mailto:haassaida@gmail.com"><div><small>E-Mail</small><b>haassaida@gmail.com</b></div><span>↗</span></a><div class="cardStatic"><div><small>Standort</small><b>Murnau am Staffelsee</b></div><span>↗</span></div></div></div>
+  <div class="shell contactGrid">
+    <div class="reveal"><p class="kicker" style="color:#9eb8cd">Kontakt</p><h2>Der nächste Schritt beginnt mit einem klaren Gespräch.</h2><p>Schreiben Sie uns oder rufen Sie direkt an. Beide Ansprechpartner sind auch über WhatsApp erreichbar.</p><div class="actions" style="justify-content:flex-start"><a class="btn btnLight" href="mailto:haassaida@gmail.com">E-Mail schreiben</a><a class="btn btnGhost" href="#analyse">Digital-Check starten</a></div></div>
+    <div class="contactCards reveal revealDelay">
+      <a href="tel:+491713177920"><div><small>Maximilian Haas</small><b>+49 171 3177920</b></div><span>↗</span></a>
+      <a href="tel:+491792690310"><div><small>Leander Saida</small><b>+49 179 2690310</b></div><span>↗</span></a>
+      <a href="mailto:haassaida@gmail.com"><div><small>E-Mail</small><b>haassaida@gmail.com</b></div><span>↗</span></a>
+      <div class="cardStatic"><div><small>Standort</small><b>Murnau am Staffelsee</b></div><span>↗</span></div>
+    </div>
+  </div>
 </section>
 
-<footer><div>Haas &amp; Saida Media · Vorschauversion</div><div>Impressum · Datenschutz</div></footer>
+<footer><div>Haas &amp; Saida Media</div><div class="footerLinks"><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#top">Nach oben ↑</a></div></footer>
 <div class="toast" id="toast">Vorschau-Modus: Diese Funktion ist noch nicht live geschaltet.</div>
+
 
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
@@ -483,6 +688,8 @@ animate();
 document.querySelectorAll('.demoForm').forEach(form => form.addEventListener('submit', e => { e.preventDefault(); const t=document.getElementById('toast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2600); }));
 document.querySelectorAll('.demoAction').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); const t=document.getElementById('toast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2600); }));
 const hamb = document.getElementById('hamb'); const mob = document.getElementById('mob'); hamb?.addEventListener('click', ()=>document.body.classList.toggle('menuOpen')); mob?.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>document.body.classList.remove('menuOpen')));
+const revealObserver = new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');revealObserver.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -40px'}); document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+window.addEventListener('scroll',()=>document.querySelector('.nav')?.classList.toggle('scrolled',window.scrollY>40),{passive:true});
 </script>
 </body>
 </html>
