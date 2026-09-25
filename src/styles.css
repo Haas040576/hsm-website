@@ -48,8 +48,9 @@ a{color:inherit;text-decoration:none}
 .scrub-pin{
   position:sticky;
   top:0;
-  height:100vh;
-  min-height:100svh;
+  width:100%;
+  height:min(100vh,calc(100vw * 996 / 1918));
+  min-height:0;
   overflow:hidden;
   background:#eee7df;
 }
@@ -67,7 +68,7 @@ a{color:inherit;text-decoration:none}
   display:block;
   width:100%;
   height:100%;
-  object-fit:contain;
+  object-fit:cover;
   object-position:center center;
   background:transparent;
   image-rendering:auto;
@@ -152,10 +153,13 @@ a{color:inherit;text-decoration:none}
   transform-origin:0 50%;
 }
 @media(max-width:900px){
+  .scrub-pin{
+    height:min(100svh,calc(100vw * 996 / 1918));
+  }
   .scrub-stage video{
     width:100%;
     height:100%;
-    object-fit:contain;
+    object-fit:cover;
   }
 }
 @media(max-width:720px){
