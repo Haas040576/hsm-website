@@ -270,40 +270,25 @@ function HeroScrub() {
   const bootRef = useRef(null);
   const bootBarRef = useRef(null);
   const bootPctRef = useRef(null);
-  const meterRef = useRef(null);
-  const panelsRef = useRef([]);
+  const ctaRef = useRef(null);
 
   useEffect(() => {
     "use strict";
 
-    // Temporary footage from the supplied reference prompt.
-    // 1920×1080, 10.04s, 241 frames, all-intra: every frame is a keyframe,
-    // which is why scroll scrubbing can land on an exact frame immediately.
-    var VIDEO_URL = "https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/45567745-d826-44a2-a5ce-7ef670944e60.mp4";
+    var VIDEO_URL = "/hsm-hero.mp4";
 
     var root = rootRef.current;
     var clip = clipRef.current;
     var boot = bootRef.current;
     var bootBar = bootBarRef.current;
     var bootPct = bootPctRef.current;
-    var meter = meterRef.current;
-    var panels = panelsRef.current.filter(Boolean);
+    var cta = ctaRef.current;
 
-    if (!root || !clip || !boot || !bootBar || !bootPct || !meter) return undefined;
-
-    // Dead zones between cue ranges are deliberate: only the video remains visible,
-    // so two text panels are never readable at the same time.
-    var CUES = [
-      [0.00, 0.00, 0.15, 0.23],
-      [0.35, 0.43, 0.57, 0.65],
-      [0.77, 0.85, 1.10, 1.20]
-    ];
-    var DRIFT = 22;
+    if (!root || !clip || !boot || !bootBar || !bootPct || !cta) return undefined;
 
     function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
     function smooth(t) { return t * t * (3 - 2 * t); }
     function ramp(p, a, b) {
-      if (b <= a) return p >= b ? 1 : 0;
       return smooth(clamp((p - a) / (b - a), 0, 1));
     }
 
@@ -322,36 +307,31 @@ function HeroScrub() {
       var max = Math.max(1, root.offsetHeight - window.innerHeight);
       var rect = root.getBoundingClientRect();
       progress = clamp((-rect.top) / max, 0, 1);
-      if (duration) seekTo = progress * duration;
+      if (duration) seekTo = progress * Math.max(0, duration - 0.03);
     }
 
     function paint() {
-      meter.style.transform = "scaleX(" + progress + ")";
-
-      panels.forEach(function(el, i) {
-        var c = CUES[i];
-        if (!c) return;
-        var enter = ramp(progress, c[0], c[1]);
-        var leave = ramp(progress, c[2], c[3]);
-        var o = enter * (1 - leave);
-        var y = (1 - enter) * DRIFT - leave * DRIFT;
-        el.style.opacity = String(o);
-        el.style.transform = "translate3d(0," + y + "px,0)";
-        el.style.pointerEvents = o > 0.6 ? "auto" : "none";
-      });
+      var reveal = ramp(progress, 0.92, 0.975);
+      cta.style.opacity = String(reveal);
+      cta.style.transform =
+        "translate(-50%," + (14 * (1 - reveal)).toFixed(1) + "px) scale(" +
+        (0.96 + reveal * 0.04).toFixed(3) + ")";
+      cta.style.pointerEvents = reveal > 0.82 ? "auto" : "none";
     }
 
     function frame() {
       if (destroyed) return;
+
       if (ready && duration) {
         var gap = seekTo - seekAt;
-        if (Math.abs(gap) > 0.0008) {
-          seekAt += gap * 0.115;
+        if (Math.abs(gap) > 0.001) {
+          seekAt += gap * 0.16;
           if (clip.readyState >= 2 && !clip.seeking) {
             try { clip.currentTime = seekAt; } catch (e) {}
           }
         }
       }
+
       paint();
       raf = requestAnimationFrame(frame);
     }
@@ -369,6 +349,7 @@ function HeroScrub() {
       boot.classList.add("done");
       readScroll();
       seekAt = seekTo;
+      try { clip.currentTime = seekAt; } catch (e) {}
     }
 
     function attach(src) {
@@ -410,17 +391,16 @@ function HeroScrub() {
           var chunks = [];
           var got = 0;
 
-          // A fully buffered blob seeks far more smoothly than repeated range requests
-          // while the user scrubs quickly through the footage.
           function pump() {
             return reader.read().then(function(r) {
               if (r.done) return new Blob(chunks, { type:"video/mp4" });
               chunks.push(r.value);
               got += r.value.byteLength;
-              setProgress(total ? got / total : Math.min(got / 11e6, 0.95));
+              setProgress(total ? got / total : Math.min(got / 12e6, 0.95));
               return pump();
             });
           }
+
           return pump();
         })
         .then(function(blob) {
@@ -436,16 +416,13 @@ function HeroScrub() {
         });
     }
 
-    // iOS will not reliably paint a frame from a video that has never been played,
-    // so the first interaction nudges playback once and pauses immediately.
     function unlock() {
       var p = clip.play();
       if (p && p.then) p.then(function() { clip.pause(); }).catch(function() {});
       else clip.pause();
     }
 
-    var unlockEvents = ["touchstart", "pointerdown", "wheel", "keydown"];
-    unlockEvents.forEach(function(ev) {
+    ["touchstart", "pointerdown", "wheel", "keydown"].forEach(function(ev) {
       window.addEventListener(ev, unlock, { once:true, passive:true });
     });
 
@@ -466,30 +443,6 @@ function HeroScrub() {
     };
   }, []);
 
-  const panelData = [
-    {
-      eyebrow: <>Haas &amp; Saida Media <span>·</span> Digital Solutions</>,
-      title: <>Your business.<br />Built better.</>,
-      sub: "Custom Softwares, Social Media Betreuung, KI Beratung und Websites – entwickelt für echte Abläufe statt Standardpakete.",
-      href: "#digital-check",
-      cta: "Digital Check starten"
-    },
-    {
-      eyebrow: <>Custom Softwares <span>·</span> KI Beratung</>,
-      title: <>Build what your<br />business actually needs.</>,
-      sub: "Wir digitalisieren Prozesse, automatisieren repetitive Arbeit und entwickeln Systeme, die zu deinem Unternehmen passen.",
-      href: "#software",
-      cta: "Leistungen ansehen"
-    },
-    {
-      eyebrow: <>Social Media Betreuung <span>·</span> Websites</>,
-      title: <>A digital presence<br />that actually works.</>,
-      sub: "Strategie, Content, Design und Technologie greifen zusammen – für einen Auftritt, der professionell aussieht und sinnvoll funktioniert.",
-      href: "#projects",
-      cta: "Projekte ansehen"
-    }
-  ];
-
   return (
     <section className="scrub-hero" id="top" ref={rootRef}>
       <div className="scrub-pin">
@@ -500,44 +453,11 @@ function HeroScrub() {
 
         <div className="scrub-stage">
           <video ref={clipRef} muted playsInline preload="auto" disablePictureInPicture />
-          <div className="scrub-veil"></div>
-          <div className="scrub-grain"></div>
         </div>
 
-        <i className="scrub-meter" ref={meterRef}></i>
-
-        <header className="scrub-chrome">
-          <a className="scrub-mark" href="#top">
-            <span className="scrub-mark-star" aria-hidden="true">✵</span>
-            <span>HSM</span>
-          </a>
-          <nav className="scrub-nav">
-            <a href="#software">Leistungen</a>
-            <a href="#projects">Projekte</a>
-            <a className="scrub-pill" href="#digital-check">Digital Check</a>
-          </nav>
-        </header>
-
-        <main className="scrub-panels">
-          {panelData.map((panel, index) => (
-            <section
-              className="scrub-panel"
-              key={index}
-              ref={(el) => { panelsRef.current[index] = el; }}
-            >
-              <div className="scrub-eyebrow">{panel.eyebrow}</div>
-              <h1>{panel.title}</h1>
-              <p className="scrub-sub">{panel.sub}</p>
-              <div className="scrub-cta">
-                <a className="scrub-pill" href={panel.href}>{panel.cta}</a>
-              </div>
-            </section>
-          ))}
-        </main>
-
-        <footer className="scrub-foot">
-          Haas &amp; Saida Media &nbsp;·&nbsp; Custom Softwares &nbsp;·&nbsp; KI Beratung &nbsp;·&nbsp; Social Media &nbsp;·&nbsp; Websites
-        </footer>
+        <a className="scrub-final-cta" href="#contact" ref={ctaRef}>
+          Anfrage senden <span aria-hidden="true">→</span>
+        </a>
       </div>
     </section>
   );
