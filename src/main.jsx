@@ -303,11 +303,31 @@ function HeroScrub() {
     var raf = 0;
     var destroyed = false;
 
-    function readScroll() {
-      var max = Math.max(1, root.offsetHeight - window.innerHeight);
-      var rect = root.getBoundingClientRect();
-      progress = clamp((-rect.top) / max, 0, 1);
+    function setScrubProgress(next) {
+      progress = clamp(next, 0, 1);
       if (duration) seekTo = progress * Math.max(0, duration - 0.03);
+      paint();
+    }
+
+    function readScroll() {
+      if (duration) seekTo = progress * Math.max(0, duration - 0.03);
+    }
+
+    function onWheel(event) {
+      var rect = root.getBoundingClientRect();
+      var touchingHero = rect.top <= 2 && rect.bottom >= -2;
+      if (!touchingHero) return;
+
+      var forward = event.deltaY > 0;
+      var backward = event.deltaY < 0;
+      var shouldConsume =
+        (forward && progress < 0.999) ||
+        (backward && progress > 0.001 && rect.top >= -2);
+
+      if (!shouldConsume) return;
+
+      event.preventDefault();
+      setScrubProgress(progress + event.deltaY / 1700);
     }
 
     function paint() {
@@ -426,7 +446,7 @@ function HeroScrub() {
       window.addEventListener(ev, unlock, { once:true, passive:true });
     });
 
-    window.addEventListener("scroll", readScroll, { passive:true });
+    window.addEventListener("wheel", onWheel, { passive:false });
     window.addEventListener("resize", readScroll);
 
     readScroll();
@@ -437,7 +457,7 @@ function HeroScrub() {
     return function() {
       destroyed = true;
       cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", readScroll);
+      window.removeEventListener("wheel", onWheel);
       window.removeEventListener("resize", readScroll);
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
