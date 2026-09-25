@@ -42,8 +42,8 @@ a{color:inherit;text-decoration:none}
   position:relative;
   z-index:1;
   width:100%;
-  height:min(100vh,calc(100vw * 996 / 1918));
-  min-height:0;
+  height:100vh;
+  min-height:100svh;
   background:#f2f0ec;
   overflow:hidden;
 }
@@ -155,7 +155,7 @@ a{color:inherit;text-decoration:none}
 }
 @media(max-width:900px){
   .scrub-hero{
-    height:min(100svh,calc(100vw * 996 / 1918));
+    height:100svh;
   }
   .scrub-stage video{
     width:100%;
