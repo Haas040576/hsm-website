@@ -41,15 +41,16 @@ a{color:inherit;text-decoration:none}
 .scrub-hero{
   position:relative;
   z-index:1;
-  height:520vh;
-  min-height:3000px;
-  background:#f2f0ec;
-}
-.scrub-pin{
-  position:sticky;
-  top:0;
   width:100%;
   height:min(100vh,calc(100vw * 996 / 1918));
+  min-height:0;
+  background:#f2f0ec;
+  overflow:hidden;
+}
+.scrub-pin{
+  position:relative;
+  width:100%;
+  height:100%;
   min-height:0;
   overflow:hidden;
   background:#eee7df;
@@ -153,7 +154,7 @@ a{color:inherit;text-decoration:none}
   transform-origin:0 50%;
 }
 @media(max-width:900px){
-  .scrub-pin{
+  .scrub-hero{
     height:min(100svh,calc(100vw * 996 / 1918));
   }
   .scrub-stage video{
@@ -163,7 +164,6 @@ a{color:inherit;text-decoration:none}
   }
 }
 @media(max-width:720px){
-  .scrub-hero{height:470vh}
   .scrub-stage{
     background:#eee7df;
   }
