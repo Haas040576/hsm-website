@@ -294,7 +294,6 @@ function ServiceCardArt({ id }) {
           <b>Potenziale erkennen</b>
         </div>
 
-        <span className="ai-disclosure">KI-generierte Visualisierung</span>
       </div>
     );
   }
