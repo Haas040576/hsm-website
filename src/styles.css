@@ -554,3 +554,63 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
     max-width:220px;
   }
 }
+
+
+/* Route placeholders — ready for the next build steps */
+.service-destination{
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+  padding:40px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,255,255,.94),rgba(255,255,255,0) 38%),
+    linear-gradient(180deg,#edf1f5,#e7edf1);
+}
+.service-destination-back{
+  position:fixed;
+  top:24px;
+  left:28px;
+  font-size:14px;
+  font-weight:760;
+  color:#171c19;
+}
+.service-destination-card{
+  width:min(720px,100%);
+  padding:52px;
+  border:1px solid rgba(255,255,255,.82);
+  border-radius:32px;
+  background:rgba(255,255,255,.44);
+  box-shadow:0 34px 95px rgba(31,39,42,.12),inset 0 1px 0 rgba(255,255,255,.95);
+  backdrop-filter:blur(28px);
+  -webkit-backdrop-filter:blur(28px);
+}
+.service-destination-card>span{
+  color:#737b76;
+  font-size:11px;
+  font-weight:720;
+}
+.service-destination-card h1{
+  margin:14px 0 0;
+  font-size:clamp(54px,8vw,96px);
+  line-height:.92;
+  letter-spacing:-.068em;
+  font-weight:760;
+}
+.service-destination-card p{
+  max-width:520px;
+  margin:22px 0 30px;
+  color:#69716c;
+  font-size:16px;
+  line-height:1.6;
+}
+.service-destination-card>a{
+  display:inline-flex;
+  min-height:44px;
+  align-items:center;
+  padding:0 16px;
+  border-radius:999px;
+  background:#171c19;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+}
