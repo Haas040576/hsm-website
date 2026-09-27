@@ -229,8 +229,8 @@ const serviceCards = [
     subtitle: "KI Seminare, Beratung & digitale Kurse",
     meta: "Unternehmen & Privat",
     href: "/academy",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=90",
-    position: "center",
+    image: "https://images.unsplash.com/photo-1769839271768-aee5469799ee?auto=format&fit=crop&w=1600&q=90",
+    position: "center 34%",
   },
   {
     id: "software",
@@ -238,7 +238,7 @@ const serviceCards = [
     subtitle: "Individuelle Systeme für echte Abläufe",
     meta: "Software",
     href: "/software",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=90",
+    image: "https://images.unsplash.com/photo-1753715613434-9c7cb58876b9?auto=format&fit=crop&w=1600&q=90",
     position: "center",
   },
   {
@@ -247,7 +247,7 @@ const serviceCards = [
     subtitle: "Content, Strategie & Betreuung",
     meta: "Social",
     href: "/social-media",
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1400&q=90",
+    image: "https://images.unsplash.com/photo-1781606424661-de1dc2b4c6e1?auto=format&fit=crop&w=1600&q=90",
     position: "center",
   },
   {
@@ -256,77 +256,92 @@ const serviceCards = [
     subtitle: "Design, Entwicklung & digitale Präsenz",
     meta: "Web",
     href: "/websites",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=90",
+    image: "https://images.unsplash.com/photo-1727527606000-8bee0d891207?auto=format&fit=crop&w=1600&q=90",
     position: "center",
   },
 ];
 
 function CapabilitiesSection() {
-  const trackRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const wheelLockRef = useRef(false);
+  const pointerRef = useRef({ down: false, startX: 0, lastX: 0, moved: false });
 
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return undefined;
-
-    let raf = 0;
-
-    function updateActive() {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const center = track.scrollLeft + track.clientWidth / 2;
-        let bestIndex = 0;
-        let bestDistance = Infinity;
-
-        Array.from(track.querySelectorAll(".image-service-card")).forEach((card, index) => {
-          const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-          const distance = Math.abs(cardCenter - center);
-          if (distance < bestDistance) {
-            bestDistance = distance;
-            bestIndex = index;
-          }
-        });
-
-        setActiveIndex(bestIndex);
-      });
-    }
-
-    function wheelToHorizontal(event) {
-      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-
-      const max = track.scrollWidth - track.clientWidth;
-      const canMoveForward = event.deltaY > 0 && track.scrollLeft < max - 2;
-      const canMoveBack = event.deltaY < 0 && track.scrollLeft > 2;
-
-      if (!canMoveForward && !canMoveBack) return;
-
-      event.preventDefault();
-      track.scrollBy({
-        left: event.deltaY * 1.35,
-        behavior: "smooth",
-      });
-    }
-
-    track.addEventListener("scroll", updateActive, { passive: true });
-    track.addEventListener("wheel", wheelToHorizontal, { passive: false });
-    updateActive();
-
-    return () => {
-      cancelAnimationFrame(raf);
-      track.removeEventListener("scroll", updateActive);
-      track.removeEventListener("wheel", wheelToHorizontal);
-    };
-  }, []);
-
-  function focusCard(index) {
-    const track = trackRef.current;
-    const card = track?.querySelectorAll(".image-service-card")[index];
-    if (!track || !card) return;
-
-    track.scrollTo({
-      left: card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2,
-      behavior: "smooth",
+  function move(direction) {
+    setActiveIndex((current) => {
+      const count = serviceCards.length;
+      return (current + direction + count) % count;
     });
+  }
+
+  function circularOffset(index) {
+    const count = serviceCards.length;
+    let offset = index - activeIndex;
+
+    if (offset > count / 2) offset -= count;
+    if (offset < -count / 2) offset += count;
+
+    if (count % 2 === 0 && offset === count / 2) {
+      offset = activeIndex % 2 === 0 ? count / 2 : -count / 2;
+    }
+
+    return offset;
+  }
+
+  function handleWheel(event) {
+    const primary = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+    if (Math.abs(primary) < 18 || wheelLockRef.current) return;
+
+    event.preventDefault();
+    wheelLockRef.current = true;
+    move(primary > 0 ? 1 : -1);
+
+    window.setTimeout(() => {
+      wheelLockRef.current = false;
+    }, 440);
+  }
+
+  function handlePointerDown(event) {
+    pointerRef.current = {
+      down: true,
+      startX: event.clientX,
+      lastX: event.clientX,
+      moved: false,
+    };
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  }
+
+  function handlePointerMove(event) {
+    if (!pointerRef.current.down) return;
+
+    pointerRef.current.lastX = event.clientX;
+    if (Math.abs(event.clientX - pointerRef.current.startX) > 8) {
+      pointerRef.current.moved = true;
+    }
+  }
+
+  function handlePointerUp(event) {
+    if (!pointerRef.current.down) return;
+
+    const delta = pointerRef.current.lastX - pointerRef.current.startX;
+    pointerRef.current.down = false;
+    event.currentTarget.releasePointerCapture?.(event.pointerId);
+
+    if (Math.abs(delta) > 48) {
+      move(delta < 0 ? 1 : -1);
+    }
+  }
+
+  function handleCardClick(event, index) {
+    if (pointerRef.current.moved) {
+      event.preventDefault();
+      pointerRef.current.moved = false;
+      return;
+    }
+
+    if (index !== activeIndex) {
+      event.preventDefault();
+      setActiveIndex(index);
+    }
   }
 
   return (
@@ -337,57 +352,72 @@ function CapabilitiesSection() {
         <p>Vier Bereiche. Ein digitaler Partner.</p>
       </div>
 
-      <div className="service-carousel-shell">
-        <div className="service-carousel-glow glow-left"></div>
-        <div className="service-carousel-glow glow-right"></div>
+      <div
+        className="service-3d-carousel"
+        onWheel={handleWheel}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
+        <div className="service-3d-stage">
+          {serviceCards.map((item, index) => {
+            const offset = circularOffset(index);
+            const absOffset = Math.abs(offset);
 
-        <div className="service-image-track" ref={trackRef}>
-          <div className="service-track-spacer" aria-hidden="true"></div>
+            return (
+              <a
+                className={"image-service-card " + (index === activeIndex ? "is-active" : "")}
+                href={item.href}
+                key={item.id}
+                onClick={(event) => handleCardClick(event, index)}
+                style={{
+                  "--card-offset": offset,
+                  "--card-abs": absOffset,
+                  "--card-z": 20 - absOffset,
+                }}
+                aria-label={item.label + ": " + item.subtitle}
+              >
+                <img
+                  src={item.image}
+                  alt=""
+                  loading={index === 0 ? "eager" : "lazy"}
+                  draggable="false"
+                  style={{ objectPosition: item.position }}
+                />
 
-          {serviceCards.map((item, index) => (
-            <a
-              className={"image-service-card " + (activeIndex === index ? "is-active" : "")}
-              href={item.href}
-              key={item.id}
-              onMouseEnter={() => focusCard(index)}
-              aria-label={item.label + ": " + item.subtitle}
-            >
-              <img
-                src={item.image}
-                alt=""
-                loading={index === 0 ? "eager" : "lazy"}
-                style={{ objectPosition: item.position }}
-              />
+                <div className="service-image-shade"></div>
 
-              <div className="service-image-shade"></div>
-
-              <div className="service-image-meta">
-                <span>{item.meta}</span>
-              </div>
-
-              <div className="service-image-glass">
-                <div>
-                  <h3>{item.label}</h3>
-                  <p>{item.subtitle}</p>
+                <div className="service-image-meta">
+                  <span>{item.meta}</span>
                 </div>
-                <span className="service-image-open" aria-hidden="true">→</span>
-              </div>
-            </a>
-          ))}
 
-          <div className="service-track-spacer" aria-hidden="true"></div>
+                <div className="service-image-glass">
+                  <div>
+                    <h3>{item.label}</h3>
+                    <p>{item.subtitle}</p>
+                  </div>
+                  <span className="service-image-open" aria-hidden="true">→</span>
+                </div>
+              </a>
+            );
+          })}
         </div>
 
-        <div className="service-carousel-dots" aria-hidden="true">
-          {serviceCards.map((item, index) => (
-            <button
-              key={item.id}
-              className={activeIndex === index ? "active" : ""}
-              type="button"
-              onClick={() => focusCard(index)}
-              tabIndex="-1"
-            ></button>
-          ))}
+        <div className="service-carousel-controls">
+          <button type="button" onClick={() => move(-1)} aria-label="Vorherige Leistung">←</button>
+          <div className="service-carousel-dots" aria-hidden="true">
+            {serviceCards.map((item, index) => (
+              <button
+                key={item.id}
+                className={activeIndex === index ? "active" : ""}
+                type="button"
+                onClick={() => setActiveIndex(index)}
+                tabIndex="-1"
+              ></button>
+            ))}
+          </div>
+          <button type="button" onClick={() => move(1)} aria-label="Nächste Leistung">→</button>
         </div>
       </div>
     </section>
