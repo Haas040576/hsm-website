@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 
@@ -222,68 +222,65 @@ function HeroScrub() {
 }
 
 
-const capabilityItems = [
+const serviceCards = [
   {
     id: "academy",
     label: "HSM Academy",
-    meta: "Seminare & Weiterbildung",
-    title: "Digitale Kompetenz, die im Alltag wirklich ankommt.",
-    text: "Praxisnahe Weiterbildungen für Unternehmen und Privatpersonen – von KI im Arbeitsalltag bis Smartphone, Social Media und digitaler Sicherheit.",
-    cta: "Academy entdecken",
+    title: "Digitale Kompetenz für Unternehmen und Menschen.",
+    text: "KI-Weiterbildungen für Teams sowie verständliche Kurse zu KI, Smartphone und Social Media für Privatpersonen.",
+    className: "service-glass-card service-glass-card-academy",
   },
   {
     id: "software",
     label: "Custom Software",
-    meta: "Individuelle Systeme",
-    title: "Software, die sich an echte Abläufe anpasst.",
-    text: "Interne Tools, Dashboards und branchenspezifische Anwendungen, die Prozesse zusammenführen statt neue Umwege zu schaffen.",
-    cta: "Software ansehen",
+    title: "Systeme, die sich an echte Abläufe anpassen.",
+    text: "Interne Tools, Dashboards und individuelle Software für konkrete Prozesse.",
+    className: "service-glass-card",
   },
   {
     id: "ki",
     label: "KI Beratung",
-    meta: "Prozesse & Automatisierung",
-    title: "KI dort einsetzen, wo sie wirklich Zeit spart.",
-    text: "Wir analysieren wiederkehrende Aufgaben, wählen sinnvolle Tools und entwickeln klare Workflows für den täglichen Einsatz.",
-    cta: "KI Beratung ansehen",
+    title: "KI sinnvoll in den Arbeitsalltag bringen.",
+    text: "Prozesse verstehen, Potenziale erkennen und saubere Workflows aufbauen.",
+    className: "service-glass-card",
   },
   {
     id: "social",
     label: "Social Media",
-    meta: "Strategie & Betreuung",
-    title: "Social Media mit Struktur statt Einzelposts.",
-    text: "Strategie, Content, Planung und Auswertung in einem durchgängigen System – passend zur Marke und zur Zielgruppe.",
-    cta: "Social Media ansehen",
+    title: "Content und Betreuung mit einem klaren System.",
+    text: "Strategie, Produktion, Planung und Auswertung für moderne Marken.",
+    className: "service-glass-card",
   },
   {
     id: "web",
     label: "Websites",
-    meta: "Design & Entwicklung",
-    title: "Websites, die hochwertig aussehen und klar funktionieren.",
-    text: "Individuelles Design, schnelle Umsetzung und saubere Nutzerführung – vom ersten Eindruck bis zur Anfrage.",
-    cta: "Websites ansehen",
+    title: "Digitale Auftritte, die hochwertig wirken und funktionieren.",
+    text: "Individuelles Webdesign mit klarer Nutzerführung und sauberer Entwicklung.",
+    className: "service-glass-card",
   },
 ];
 
-function CapabilityVisual({ id }) {
+function ServiceCardArt({ id }) {
   if (id === "academy") {
     return (
-      <div className="cap-visual academy-preview">
-        <div className="academy-card academy-business">
-          <span>Für Unternehmen</span>
-          <b>KI im Arbeitsalltag</b>
-          <p>Workshops für Teams, Führungskräfte und individuelle Unternehmensprozesse.</p>
-          <div className="academy-tags">
-            <i>ChatGPT</i><i>Automatisierung</i><i>KI Grundlagen</i>
+      <div className="gallery-art gallery-art-academy" aria-hidden="true">
+        <div className="academy-screen">
+          <div className="academy-screen-top"><span>HSM Academy</span><i>Workshop</i></div>
+          <div className="academy-screen-copy">
+            <small>Für Unternehmen</small>
+            <b>KI im Arbeitsalltag</b>
+            <div className="academy-module-row">
+              <span>ChatGPT</span><span>Automatisierung</span><span>Praxis</span>
+            </div>
           </div>
         </div>
-        <div className="academy-card academy-private">
-          <span>Für Privatpersonen</span>
+        <div className="academy-mini-card academy-mini-card-dark">
+          <small>Privat</small>
           <b>Digital einfach verstehen</b>
-          <p>KI, Smartphone, Social Media und digitale Sicherheit verständlich erklärt.</p>
-          <div className="academy-tags">
-            <i>KI & ChatGPT</i><i>Smartphone</i><i>Social Media</i>
-          </div>
+        </div>
+        <div className="academy-mini-card academy-mini-card-light">
+          <small>Kurs</small>
+          <b>Smartphone & Social Media</b>
         </div>
       </div>
     );
@@ -291,14 +288,16 @@ function CapabilityVisual({ id }) {
 
   if (id === "software") {
     return (
-      <div className="cap-visual app-preview">
-        <div className="app-preview-top"><b>HSM OS</b><span>Live</span></div>
-        <div className="app-preview-body">
-          <aside><i></i><i></i><i></i><i></i></aside>
-          <div className="app-preview-main">
-            <div className="app-metrics"><span><small>Projekte</small><b>12</b></span><span><small>Automationen</small><b>28</b></span></div>
-            <div className="app-chart"><i></i></div>
-            <div className="app-list"><span></span><span></span><span></span></div>
+      <div className="gallery-art gallery-art-software" aria-hidden="true">
+        <div className="software-window">
+          <div className="software-window-top"><span>HSM OS</span><i>Live</i></div>
+          <div className="software-layout">
+            <aside><i></i><i></i><i></i></aside>
+            <div>
+              <div className="software-metrics"><span></span><span></span></div>
+              <div className="software-graph"><i></i></div>
+              <div className="software-lines"><span></span><span></span><span></span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -307,99 +306,76 @@ function CapabilityVisual({ id }) {
 
   if (id === "ki") {
     return (
-      <div className="cap-visual workflow-preview">
-        <div className="flow-node"><small>Eingang</small><b>E-Mail & Dokumente</b></div>
-        <div className="flow-line"></div>
-        <div className="flow-node focus"><small>Verarbeitung</small><b>KI Workflow</b></div>
-        <div className="flow-line"></div>
-        <div className="flow-node"><small>Ausgabe</small><b>Geprüft & bereit</b></div>
+      <div className="gallery-art gallery-art-ai" aria-hidden="true">
+        <div className="ai-orbit"></div>
+        <div className="ai-core"><span>HSM</span><b>KI</b></div>
+        <div className="ai-chip ai-chip-one">Analyse</div>
+        <div className="ai-chip ai-chip-two">Workflow</div>
+        <div className="ai-chip ai-chip-three">Automatisierung</div>
       </div>
     );
   }
 
   if (id === "social") {
     return (
-      <div className="cap-visual social-preview">
-        <div className="social-column">
-          <small>Content Plan</small>
-          <div className="social-post tall"></div>
-          <div className="social-post"></div>
+      <div className="gallery-art gallery-art-social" aria-hidden="true">
+        <div className="social-phone social-phone-back">
+          <span></span><span></span>
         </div>
-        <div className="social-column shifted">
-          <div className="social-post"></div>
-          <div className="social-post tall"></div>
+        <div className="social-phone social-phone-front">
+          <div className="social-phone-head"></div>
+          <div className="social-feed-card"></div>
+          <div className="social-feed-lines"><i></i><i></i></div>
         </div>
-        <div className="social-stats">
-          <span><small>Reichweite</small><b>+34%</b></span>
-          <span><small>Interaktion</small><b>8.4%</b></span>
-        </div>
+        <div className="social-float-stat"><small>Reichweite</small><b>+34%</b></div>
       </div>
     );
   }
 
   return (
-    <div className="cap-visual web-preview">
-      <div className="web-browser">
-        <div className="web-browser-top"><i></i><i></i><i></i></div>
-        <div className="web-browser-page">
-          <small>HSM</small>
-          <b>Built for the way<br/>you actually work.</b>
-          <span></span>
+    <div className="gallery-art gallery-art-web" aria-hidden="true">
+      <div className="web-gallery-browser">
+        <div className="web-gallery-bar"><i></i><i></i><i></i></div>
+        <div className="web-gallery-page">
+          <span>HSM</span>
+          <b>Built for<br/>the way you work.</b>
+          <i></i>
         </div>
       </div>
-      <div className="web-phone">
-        <div></div><span></span><span></span>
-      </div>
+      <div className="web-gallery-mobile"><i></i><span></span><span></span></div>
     </div>
   );
 }
 
 function CapabilitiesSection() {
-  const [activeId, setActiveId] = useState("academy");
-  const active = capabilityItems.find((item) => item.id === activeId) || capabilityItems[0];
-
   return (
     <section className="capabilities-section" id="services">
       <div className="capabilities-wrap">
         <div className="capabilities-heading">
           <span>HSM</span>
           <h2>Was wir machen.</h2>
-          <p>Von Weiterbildung bis zur fertigen digitalen Lösung.</p>
+          <p>Weiterbildung, Systeme und digitale Lösungen aus einer Hand.</p>
         </div>
 
-        <div className="capabilities-glass">
-          <nav className="capability-nav" aria-label="HSM Leistungen">
-            <div className="capability-nav-label">Leistungen</div>
-            {capabilityItems.map((item) => (
-              <button
-                type="button"
-                key={item.id}
-                className={activeId === item.id ? "active" : ""}
-                onClick={() => setActiveId(item.id)}
-              >
+        <div className="service-gallery">
+          {serviceCards.map((item) => (
+            <article className={item.className} key={item.id}>
+              <div className="service-card-art-wrap">
+                <ServiceCardArt id={item.id} />
+              </div>
+              <div className="service-card-copy">
                 <span>{item.label}</span>
-                <small>{item.meta}</small>
-              </button>
-            ))}
-          </nav>
-
-          <div className={"capability-content capability-" + active.id}>
-            <div className="capability-copy">
-              {active.id === "academy" && <span className="capability-featured">Hauptbereich</span>}
-              <h3>{active.title}</h3>
-              <p>{active.text}</p>
-              <button className="capability-cta" type="button">{active.cta}</button>
-            </div>
-            <div className="capability-stage">
-              <CapabilityVisual id={active.id} />
-            </div>
-          </div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <button type="button">Mehr erfahren</button>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
   );
 }
-
 
 function App() {
   return (
