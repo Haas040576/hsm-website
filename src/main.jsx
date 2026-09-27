@@ -394,7 +394,28 @@ function CapabilitiesSection() {
   );
 }
 
+function ServiceDestination({ item }) {
+  return (
+    <main className="service-destination">
+      <a className="service-destination-back" href="/">HSM</a>
+      <div className="service-destination-card">
+        <span>{item.meta}</span>
+        <h1>{item.label}</h1>
+        <p>{item.subtitle}</p>
+        <a href="/">Zurück zur Startseite</a>
+      </div>
+    </main>
+  );
+}
+
 function App() {
+  const path = window.location.pathname;
+  const activeService = serviceCards.find((item) => item.href === path);
+
+  if (activeService) {
+    return <ServiceDestination item={activeService} />;
+  }
+
   return (
     <main>
       <HeroScrub />
