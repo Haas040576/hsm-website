@@ -424,6 +424,279 @@ function CapabilitiesSection() {
   );
 }
 
+function usePageMeta({ title, description, path }) {
+  useEffect(() => {
+    document.title = title;
+
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "description");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", description);
+
+    const canonicalUrl = "https://haas-saida-media.de" + path;
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", canonicalUrl);
+
+    const setProperty = (property, content) => {
+      let tag = document.querySelector('meta[property="' + property + '"]');
+      if (!tag) {
+        tag = document.createElement("meta");
+        tag.setAttribute("property", property);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute("content", content);
+    };
+
+    setProperty("og:title", title);
+    setProperty("og:description", description);
+    setProperty("og:url", canonicalUrl);
+    setProperty("og:type", "website");
+  }, [title, description, path]);
+}
+
+const academyFormats = [
+  {
+    label: "KI Schulung für Unternehmen",
+    title: "Teams sicher und sinnvoll mit KI arbeiten lassen.",
+    text: "Für Mitarbeitende, Führungskräfte und Teams, die ChatGPT und andere KI-Werkzeuge im Arbeitsalltag einsetzen wollen.",
+    tags: ["KI Schulung Unternehmen", "ChatGPT Workshop", "Mitarbeiter Weiterbildung"],
+  },
+  {
+    label: "KI Beratung",
+    title: "Erst verstehen, wo KI wirklich etwas bringt.",
+    text: "Wir prüfen Aufgaben und Prozesse, bevor neue Tools eingeführt werden. So entsteht ein klarer, sinnvoller Einsatz statt Tool-Chaos.",
+    tags: ["KI Beratung", "Prozessanalyse", "Automatisierung"],
+  },
+  {
+    label: "Digitale Kurse für Privatpersonen",
+    title: "KI, Smartphone und Social Media verständlich erklärt.",
+    text: "Persönlich und ohne Fachsprache. Für Einsteiger, ältere Menschen und alle, die digital sicherer werden möchten.",
+    tags: ["KI Kurs", "Smartphone Kurs", "Social Media Kurs"],
+  },
+];
+
+const academyFaqs = [
+  {
+    q: "Für wen ist eine KI-Schulung im Unternehmen sinnvoll?",
+    a: "Für Teams und Mitarbeitende, die KI bereits nutzen oder künftig im Arbeitsalltag einsetzen sollen. Inhalte und Übungen werden an Rollen, Vorkenntnisse und typische Aufgaben angepasst.",
+  },
+  {
+    q: "Bietet HSM Academy KI-Schulungen in München an?",
+    a: "Ja. Workshops können vor Ort in München und Oberbayern sowie remote durchgeführt werden. Format und Umfang werden passend zum Unternehmen geplant.",
+  },
+  {
+    q: "Geht es nur um ChatGPT?",
+    a: "Nein. ChatGPT ist häufig ein guter Einstieg, aber die Schulung kann auch andere KI-Werkzeuge, sichere Nutzung, Prozessautomatisierung und konkrete Anwendungsfälle aus dem Unternehmen behandeln.",
+  },
+  {
+    q: "Was hat der EU AI Act mit KI-Weiterbildung zu tun?",
+    a: "Artikel 4 des EU AI Act verpflichtet Anbieter und Betreiber von KI-Systemen dazu, Maßnahmen zur Förderung von KI-Kompetenz bei Mitarbeitenden und weiteren Personen zu treffen, die KI-Systeme in ihrem Auftrag nutzen. Eine passende Schulung kann ein Baustein dafür sein.",
+  },
+];
+
+function AcademyPage() {
+  const [audience, setAudience] = useState("unternehmen");
+
+  usePageMeta({
+    title: "KI Schulung München für Unternehmen & Teams | HSM Academy",
+    description: "Praxisnahe KI-Schulungen, ChatGPT Workshops und KI-Beratung für Unternehmen in München, Oberbayern und remote. Dazu digitale Kurse für Privatpersonen.",
+    path: "/academy",
+  });
+
+  return (
+    <main className="academy-page">
+      <nav className="academy-nav">
+        <a className="academy-nav-logo" href="/">HSM</a>
+        <div className="academy-nav-links">
+          <a href="#unternehmen">Unternehmen</a>
+          <a href="#privat">Privat</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <a className="academy-nav-cta" href="mailto:kontakt@haas-saida-media.de?subject=HSM%20Academy%20Anfrage">Seminar anfragen</a>
+      </nav>
+
+      <section className="academy-hero">
+        <div className="academy-hero-backdrop"></div>
+        <div className="academy-hero-grid">
+          <div className="academy-hero-copy">
+            <span className="academy-page-kicker">HSM Academy</span>
+            <h1>KI-Schulungen für Unternehmen.<br/>Digitale Kurse für Menschen.</h1>
+            <p>Praxisnah, verständlich und auf den echten Alltag zugeschnitten – vor Ort in München und Oberbayern oder remote.</p>
+
+            <div className="academy-hero-actions">
+              <a href="#unternehmen">Für Unternehmen</a>
+              <a href="#privat" className="light">Für Privatpersonen</a>
+            </div>
+
+            <div className="academy-keywords" aria-label="Schwerpunkte">
+              <span>ChatGPT Schulung</span>
+              <span>KI Weiterbildung</span>
+              <span>KI Beratung</span>
+            </div>
+          </div>
+
+          <div className="academy-hero-visual">
+            <img
+              src="https://images.unsplash.com/photo-1769839271768-aee5469799ee?auto=format&fit=crop&w=1800&q=92"
+              alt="Dozent erklärt Inhalte in einem Business-Seminar"
+            />
+            <div className="academy-hero-shade"></div>
+
+            <div className="academy-hero-panel panel-team">
+              <small>Unternehmen</small>
+              <b>KI im Arbeitsalltag</b>
+              <span>Workshop für Teams</span>
+            </div>
+
+            <div className="academy-hero-panel panel-private">
+              <small>Privat</small>
+              <b>Digital sicherer werden</b>
+              <span>KI, Smartphone & Social Media</span>
+            </div>
+
+            <div className="academy-hero-panel panel-ai">
+              <small>KI Beratung</small>
+              <b>Potenziale erkennen</b>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="academy-switch-section">
+        <div className="academy-switch-copy">
+          <span>HSM Academy</span>
+          <h2>Was passt zu dir?</h2>
+        </div>
+
+        <div className="academy-segmented">
+          <button className={audience === "unternehmen" ? "active" : ""} onClick={() => setAudience("unternehmen")}>Unternehmen</button>
+          <button className={audience === "privat" ? "active" : ""} onClick={() => setAudience("privat")}>Privatpersonen</button>
+        </div>
+
+        <div className="academy-focus-card">
+          {audience === "unternehmen" ? (
+            <>
+              <div>
+                <span>KI Schulung für Unternehmen</span>
+                <h3>Von den Grundlagen bis zum konkreten Einsatz im Team.</h3>
+              </div>
+              <p>ChatGPT, KI-Tools, sichere Nutzung und echte Anwendungsfälle aus dem Unternehmen. Kein allgemeiner Vortrag, sondern Weiterbildung mit direktem Bezug zum Arbeitsalltag.</p>
+              <a href="#unternehmen">Unternehmensangebote ansehen</a>
+            </>
+          ) : (
+            <>
+              <div>
+                <span>Digitale Weiterbildung</span>
+                <h3>Technik verstehen, ohne Technik-Sprache lernen zu müssen.</h3>
+              </div>
+              <p>KI, Smartphone, WhatsApp, Social Media und digitale Sicherheit werden Schritt für Schritt erklärt – für Einsteiger und ältere Menschen.</p>
+              <a href="#privat">Private Kurse ansehen</a>
+            </>
+          )}
+        </div>
+      </section>
+
+      <section className="academy-formats" id="unternehmen">
+        <div className="academy-section-head">
+          <span>Unternehmen</span>
+          <h2>KI-Schulung, Beratung und Weiterbildung für Teams.</h2>
+          <p>Für Unternehmen in München, Oberbayern und deutschlandweit remote.</p>
+        </div>
+
+        <div className="academy-format-grid">
+          {academyFormats.map((format, index) => (
+            <article className="academy-format-card" key={format.label}>
+              <div className={"academy-format-visual visual-" + index}>
+                <span>{format.label}</span>
+                <div className="academy-format-ui">
+                  <i></i><i></i><i></i>
+                  <b>{index === 0 ? "Team Workshop" : index === 1 ? "Prozess Check" : "Digital Kurs"}</b>
+                </div>
+              </div>
+              <div className="academy-format-copy">
+                <span>{format.label}</span>
+                <h3>{format.title}</h3>
+                <p>{format.text}</p>
+                <div className="academy-format-tags">
+                  {format.tags.map((tag) => <i key={tag}>{tag}</i>)}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="academy-ai-act">
+        <div className="academy-ai-act-card">
+          <div>
+            <span>KI-Kompetenz im Unternehmen</span>
+            <h2>EU AI Act nicht nur abhaken. Mitarbeitende wirklich befähigen.</h2>
+          </div>
+          <p>Artikel 4 des EU AI Act verlangt Maßnahmen zur Förderung von KI-Kompetenz bei Personen, die KI-Systeme im Auftrag eines Unternehmens nutzen. HSM Academy verbindet dieses Thema mit konkreten Anwendungen im Arbeitsalltag.</p>
+        </div>
+      </section>
+
+      <section className="academy-private-section" id="privat">
+        <div className="academy-private-visual">
+          <div className="academy-private-phone">
+            <div></div>
+            <span>Nachrichten</span>
+            <span>Fotos</span>
+            <span>Social Media</span>
+          </div>
+          <div className="academy-private-glass one"><small>KI</small><b>ChatGPT verstehen</b></div>
+          <div className="academy-private-glass two"><small>Smartphone</small><b>Sicher im Alltag</b></div>
+        </div>
+
+        <div className="academy-private-copy">
+          <span>Für Privatpersonen</span>
+          <h2>Digital einfach verstehen.</h2>
+          <p>Persönliche Kurse zu KI, Smartphone, Social Media und digitaler Sicherheit. Ruhig erklärt, ohne Fachbegriffe und angepasst an das eigene Tempo.</p>
+          <div className="academy-private-tags">
+            <span>KI & ChatGPT</span>
+            <span>Smartphone</span>
+            <span>Social Media</span>
+            <span>Digitale Sicherheit</span>
+          </div>
+          <a href="mailto:kontakt@haas-saida-media.de?subject=HSM%20Academy%20Privatkurs">Privaten Kurs anfragen</a>
+        </div>
+      </section>
+
+      <section className="academy-faq" id="faq">
+        <div className="academy-faq-head">
+          <span>Fragen</span>
+          <h2>KI-Schulung & HSM Academy</h2>
+        </div>
+        <div className="academy-faq-list">
+          {academyFaqs.map((faq) => (
+            <details key={faq.q}>
+              <summary>{faq.q}<span>+</span></summary>
+              <p>{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section className="academy-final">
+        <div className="academy-final-card">
+          <span>HSM Academy</span>
+          <h2>Welches Wissen braucht dein Team?</h2>
+          <p>Wir stellen das Format passend zu Unternehmen, Teilnehmern und Einsatzgebiet zusammen.</p>
+          <a href="mailto:kontakt@haas-saida-media.de?subject=KI%20Schulung%20Unternehmen">KI-Schulung anfragen</a>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 function ServiceDestination({ item }) {
   return (
     <main className="service-destination">
@@ -441,6 +714,10 @@ function ServiceDestination({ item }) {
 function App() {
   const path = window.location.pathname;
   const activeService = serviceCards.find((item) => item.href === path);
+
+  if (path === "/academy") {
+    return <AcademyPage />;
+  }
 
   if (activeService) {
     return <ServiceDestination item={activeService} />;
