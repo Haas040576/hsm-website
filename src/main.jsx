@@ -424,7 +424,7 @@ function CapabilitiesSection() {
   );
 }
 
-function usePageMeta({ title, description, path }) {
+function usePageMeta({ title, description, path, robots = "index,follow" }) {
   useEffect(() => {
     document.title = title;
 
@@ -435,6 +435,14 @@ function usePageMeta({ title, description, path }) {
       document.head.appendChild(meta);
     }
     meta.setAttribute("content", description);
+
+    let robotsMeta = document.querySelector('meta[name="robots"]');
+    if (!robotsMeta) {
+      robotsMeta = document.createElement("meta");
+      robotsMeta.setAttribute("name", "robots");
+      document.head.appendChild(robotsMeta);
+    }
+    robotsMeta.setAttribute("content", robots);
 
     const canonicalUrl = "https://haas-saida-media.de" + path;
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -459,7 +467,7 @@ function usePageMeta({ title, description, path }) {
     setProperty("og:description", description);
     setProperty("og:url", canonicalUrl);
     setProperty("og:type", "website");
-  }, [title, description, path]);
+  }, [title, description, path, robots]);
 }
 
 const academyFormats = [
@@ -698,6 +706,13 @@ function AcademyPage() {
 }
 
 function ServiceDestination({ item }) {
+  usePageMeta({
+    title: item.label + " | HSM",
+    description: item.subtitle + " – HSM.",
+    path: item.href,
+    robots: "noindex,follow",
+  });
+
   return (
     <main className="service-destination">
       <a className="service-destination-back" href="/">HSM</a>
