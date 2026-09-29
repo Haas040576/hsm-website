@@ -184,8 +184,46 @@ function HeroScrub() {
       window.addEventListener(ev, unlock, { once:true, passive:true });
     });
 
+    function restoreFrame() {
+      if (document.hidden || !clip || !duration) return;
+
+      ready = true;
+      seekAt = seekTo;
+
+      try {
+        clip.pause();
+        clip.currentTime = seekTo;
+      } catch (e) {}
+
+      var playPromise;
+      try { playPromise = clip.play(); } catch (e) {}
+
+      if (playPromise && playPromise.then) {
+        playPromise
+          .then(function() {
+            clip.pause();
+            try { clip.currentTime = seekTo; } catch (e) {}
+          })
+          .catch(function() {
+            try { clip.currentTime = seekTo; } catch (e) {}
+          });
+      }
+    }
+
+    function handleVisibility() {
+      if (!document.hidden) {
+        window.requestAnimationFrame(restoreFrame);
+      }
+    }
+
+    function handlePageShow() {
+      window.requestAnimationFrame(restoreFrame);
+    }
+
     window.addEventListener("wheel", onWheel, { passive:false });
     window.addEventListener("resize", readScroll);
+    window.addEventListener("pageshow", handlePageShow);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     readScroll();
     paint();
@@ -197,6 +235,8 @@ function HeroScrub() {
       cancelAnimationFrame(raf);
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("resize", readScroll);
+      window.removeEventListener("pageshow", handlePageShow);
+      document.removeEventListener("visibilitychange", handleVisibility);
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
   }, []);
