@@ -229,7 +229,7 @@ const serviceCards = [
     subtitle: "KI Seminare, Beratung & digitale Kurse",
     meta: "Unternehmen & Privat",
     href: "/academy",
-    image: "https://images.unsplash.com/photo-1769839271768-aee5469799ee?auto=format&fit=crop&w=1600&q=90",
+    image: "https://images.unsplash.com/photo-1769839271768-aee5469799ee?auto=format&fit=crop&w=1800&q=92",
     position: "center 34%",
   },
   {
@@ -238,7 +238,7 @@ const serviceCards = [
     subtitle: "Individuelle Systeme für echte Abläufe",
     meta: "Software",
     href: "/software",
-    image: "https://images.unsplash.com/photo-1753715613434-9c7cb58876b9?auto=format&fit=crop&w=1600&q=90",
+    image: "https://images.unsplash.com/photo-1753715613434-9c7cb58876b9?auto=format&fit=crop&w=1800&q=92",
     position: "center",
   },
   {
@@ -247,7 +247,7 @@ const serviceCards = [
     subtitle: "Content, Strategie & Betreuung",
     meta: "Social",
     href: "/social-media",
-    image: "https://images.unsplash.com/photo-1781606424661-de1dc2b4c6e1?auto=format&fit=crop&w=1600&q=90",
+    image: "https://images.unsplash.com/photo-1781606424661-de1dc2b4c6e1?auto=format&fit=crop&w=1800&q=92",
     position: "center",
   },
   {
@@ -256,93 +256,260 @@ const serviceCards = [
     subtitle: "Design, Entwicklung & digitale Präsenz",
     meta: "Web",
     href: "/websites",
-    image: "https://images.unsplash.com/photo-1727527606000-8bee0d891207?auto=format&fit=crop&w=1600&q=90",
+    image: "https://images.unsplash.com/photo-1727527606000-8bee0d891207?auto=format&fit=crop&w=1800&q=92",
     position: "center",
   },
 ];
 
+const serviceThickness = [-2.2, -1.1, 0, 1.1, 2.2];
+
+function ServiceCylinderCard({ item, index, cardRef }) {
+  return (
+    <a
+      className="cylinder-card"
+      href={item.href}
+      ref={cardRef}
+      aria-label={item.label + ": " + item.subtitle}
+    >
+      {serviceThickness.map((depth, layerIndex) => {
+        const isBack = layerIndex === 0;
+        const isFront = layerIndex === serviceThickness.length - 1;
+
+        if (!isFront && !isBack) {
+          return (
+            <span
+              className="cylinder-card-edge"
+              key={depth}
+              style={{ transform: "translateZ(" + depth + "px)" }}
+              aria-hidden="true"
+            />
+          );
+        }
+
+        if (isBack) {
+          return (
+            <span
+              className="cylinder-card-face cylinder-card-back"
+              key={depth}
+              style={{ transform: "translateZ(" + depth + "px) rotateY(180deg)" }}
+              aria-hidden="true"
+            >
+              <img src={item.image} alt="" draggable="false" style={{ objectPosition: item.position }} />
+              <span className="cylinder-card-back-blur"></span>
+              <span className="cylinder-card-back-brand">HSM</span>
+              <span className="cylinder-card-back-copy">
+                <small>{item.meta}</small>
+                <b>{item.label}</b>
+                <em>{item.subtitle}</em>
+              </span>
+            </span>
+          );
+        }
+
+        return (
+          <span
+            className="cylinder-card-face cylinder-card-front"
+            key={depth}
+            style={{ transform: "translateZ(" + depth + "px)" }}
+          >
+            <img src={item.image} alt="" draggable="false" style={{ objectPosition: item.position }} />
+            <span className="cylinder-card-front-shade"></span>
+            <span className="cylinder-card-meta">{item.meta}</span>
+            <span className="cylinder-card-glass">
+              <span>
+                <b>{item.label}</b>
+                <small>{item.subtitle}</small>
+              </span>
+              <i>→</i>
+            </span>
+          </span>
+        );
+      })}
+    </a>
+  );
+}
+
 function CapabilitiesSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const wheelLockRef = useRef(false);
-  const pointerRef = useRef({ down: false, startX: 0, lastX: 0, moved: false });
+  const stageRef = useRef(null);
+  const cardsRefs = useRef([]);
+  const frameRef = useRef(0);
+  const progressRef = useRef(0);
+  const hoverRef = useRef(false);
+  const metricsRef = useRef({ cardW: 390, cardH: 520 });
+  const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
 
-  function move(direction) {
-    setActiveIndex((current) => {
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return undefined;
+
+    function clamp(v, a, b) {
+      return Math.max(a, Math.min(b, v));
+    }
+
+    function smoothstep(t) {
+      return t * t * (3 - 2 * t);
+    }
+
+    function updateMetrics() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const cardW = clamp(Math.round(w * 0.19 + 150), 250, 410);
+      const cardH = Math.round(cardW * 1.34);
+      metricsRef.current = { cardW, cardH };
+
+      cardsRefs.current.forEach((card) => {
+        if (!card) return;
+        card.style.width = cardW + "px";
+        card.style.height = cardH + "px";
+      });
+    }
+
+    function handleMouseMove(event) {
+      const rect = stage.getBoundingClientRect();
+      const rx = (event.clientX - (rect.left + rect.width / 2)) / Math.max(1, rect.width / 2);
+      const ry = (event.clientY - (rect.top + rect.height / 2)) / Math.max(1, rect.height / 2);
+      mouseRef.current.targetX = clamp(rx, -1, 1);
+      mouseRef.current.targetY = clamp(ry, -1, 1);
+    }
+
+    function handleMouseLeave() {
+      hoverRef.current = false;
+      mouseRef.current.targetX = 0;
+      mouseRef.current.targetY = 0;
+    }
+
+    function handleWheel(event) {
+      const rect = stage.getBoundingClientRect();
+      const visible = rect.bottom > 0 && rect.top < window.innerHeight;
+      if (!visible) return;
+
+      const primary = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      if (Math.abs(primary) < 3) return;
+
+      progressRef.current += primary * 0.0009;
+    }
+
+    function renderLoop() {
       const count = serviceCards.length;
-      return (current + direction + count) % count;
-    });
-  }
+      const cards = cardsRefs.current;
+      const { cardW } = metricsRef.current;
+      const viewportW = stage.clientWidth || window.innerWidth;
+      const D = 1350;
+      const gap = Math.max(42, cardW * 0.13);
+      const edgePeek = -42;
 
-  function circularOffset(index) {
-    const count = serviceCards.length;
-    let offset = index - activeIndex;
+      progressRef.current += hoverRef.current ? 0.00016 : 0.0011;
 
-    if (offset > count / 2) offset -= count;
-    if (offset < -count / 2) offset += count;
+      mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.075;
+      mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.075;
 
-    if (count % 2 === 0 && offset === count / 2) {
-      offset = activeIndex % 2 === 0 ? count / 2 : -count / 2;
+      const continuous = progressRef.current;
+      const roundedIndex = Math.round(continuous);
+      const diffFromRound = continuous - roundedIndex;
+      const easedDiff =
+        Math.sign(diffFromRound) *
+        Math.pow(Math.abs(diffFromRound) * 2, 4.2) /
+        2;
+      const virtualActiveIndex = roundedIndex + easedDiff;
+
+      for (let i = 0; i < count; i += 1) {
+        const card = cards[i];
+        if (!card) continue;
+
+        let offset = i - virtualActiveIndex;
+        const half = count / 2;
+
+        while (offset > half) offset -= count;
+        while (offset < -half) offset += count;
+
+        const absOffset = Math.abs(offset);
+        const sign = Math.sign(offset) || 1;
+
+        if (absOffset > 2.6) {
+          card.style.visibility = "hidden";
+          card.style.pointerEvents = "none";
+          continue;
+        }
+
+        card.style.visibility = "visible";
+        card.style.pointerEvents = "auto";
+
+        let x = 0;
+        let z = 0;
+        let rotY = 0;
+
+        if (absOffset <= 1) {
+          const t = absOffset;
+          const easedT = smoothstep(t);
+
+          x = sign * easedT * (cardW + gap);
+          z = 390 + easedT * (210 - 390);
+          rotY = -sign * easedT * 132;
+        } else if (absOffset <= 2) {
+          const t = absOffset - 1;
+          const easedT = smoothstep(t);
+
+          const xStart = cardW + gap;
+          const zStart = 210;
+          const zEnd = -65;
+          const rotStart = 132;
+          const rotEnd = 175;
+
+          const scaleEnd = D / (D - zEnd);
+          const xEnd = (viewportW / 2 - edgePeek) / scaleEnd - cardW / 2;
+
+          x = sign * (xStart + easedT * (xEnd - xStart));
+          z = zStart + easedT * (zEnd - zStart);
+          rotY = -sign * (rotStart + easedT * (rotEnd - rotStart));
+        } else {
+          const t = Math.min(absOffset - 2, 1);
+          const easedT = smoothstep(t);
+
+          const zStart = -65;
+          const zEnd = -260;
+          const scaleStart = D / (D - zStart);
+          const scaleEnd = D / (D - zEnd);
+          const xStart = (viewportW / 2 - edgePeek) / scaleStart - cardW / 2;
+          const xEnd = (viewportW / 2 + 150) / scaleEnd + cardW / 2;
+
+          x = sign * (xStart + easedT * (xEnd - xStart));
+          z = zStart + easedT * (zEnd - zStart);
+          rotY = -sign * (175 + easedT * 20);
+        }
+
+        const centerFactor = Math.max(0, 1 - absOffset);
+        const tiltX = -mouseRef.current.y * 10 * centerFactor;
+        const tiltY = mouseRef.current.x * 13 * centerFactor;
+
+        card.style.zIndex = String(Math.round(z + 500));
+        card.style.opacity = String(clamp(1 - Math.max(0, absOffset - 1.75) * 0.8, 0, 1));
+        card.style.transform =
+          "translate3d(" + x.toFixed(2) + "px,0," + z.toFixed(2) + "px) " +
+          "rotateX(" + tiltX.toFixed(2) + "deg) " +
+          "rotateY(" + (rotY + tiltY).toFixed(2) + "deg) " +
+          "rotateZ(-2deg)";
+      }
+
+      frameRef.current = requestAnimationFrame(renderLoop);
     }
 
-    return offset;
-  }
+    updateMetrics();
+    window.addEventListener("resize", updateMetrics);
+    stage.addEventListener("mousemove", handleMouseMove);
+    stage.addEventListener("mouseenter", () => { hoverRef.current = true; });
+    stage.addEventListener("mouseleave", handleMouseLeave);
+    stage.addEventListener("wheel", handleWheel, { passive: true });
 
-  function handleWheel(event) {
-    const primary = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-    if (Math.abs(primary) < 18 || wheelLockRef.current) return;
+    frameRef.current = requestAnimationFrame(renderLoop);
 
-    event.preventDefault();
-    wheelLockRef.current = true;
-    move(primary > 0 ? 1 : -1);
-
-    window.setTimeout(() => {
-      wheelLockRef.current = false;
-    }, 440);
-  }
-
-  function handlePointerDown(event) {
-    pointerRef.current = {
-      down: true,
-      startX: event.clientX,
-      lastX: event.clientX,
-      moved: false,
+    return () => {
+      cancelAnimationFrame(frameRef.current);
+      window.removeEventListener("resize", updateMetrics);
+      stage.removeEventListener("mousemove", handleMouseMove);
+      stage.removeEventListener("mouseleave", handleMouseLeave);
+      stage.removeEventListener("wheel", handleWheel);
     };
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-  }
-
-  function handlePointerMove(event) {
-    if (!pointerRef.current.down) return;
-
-    pointerRef.current.lastX = event.clientX;
-    if (Math.abs(event.clientX - pointerRef.current.startX) > 8) {
-      pointerRef.current.moved = true;
-    }
-  }
-
-  function handlePointerUp(event) {
-    if (!pointerRef.current.down) return;
-
-    const delta = pointerRef.current.lastX - pointerRef.current.startX;
-    pointerRef.current.down = false;
-    event.currentTarget.releasePointerCapture?.(event.pointerId);
-
-    if (Math.abs(delta) > 48) {
-      move(delta < 0 ? 1 : -1);
-    }
-  }
-
-  function handleCardClick(event, index) {
-    if (pointerRef.current.moved) {
-      event.preventDefault();
-      pointerRef.current.moved = false;
-      return;
-    }
-
-    if (index !== activeIndex) {
-      event.preventDefault();
-      setActiveIndex(index);
-    }
-  }
+  }, []);
 
   return (
     <section className="capabilities-section" id="services">
@@ -352,73 +519,21 @@ function CapabilitiesSection() {
         <p>Vier Bereiche. Ein digitaler Partner.</p>
       </div>
 
-      <div
-        className="service-3d-carousel"
-        onWheel={handleWheel}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
-      >
-        <div className="service-3d-stage">
-          {serviceCards.map((item, index) => {
-            const offset = circularOffset(index);
-            const absOffset = Math.abs(offset);
-
-            return (
-              <a
-                className={"image-service-card " + (index === activeIndex ? "is-active" : "")}
-                href={item.href}
-                key={item.id}
-                onClick={(event) => handleCardClick(event, index)}
-                style={{
-                  "--card-offset": offset,
-                  "--card-abs": absOffset,
-                  "--card-z": 20 - absOffset,
-                }}
-                aria-label={item.label + ": " + item.subtitle}
-              >
-                <img
-                  src={item.image}
-                  alt=""
-                  loading={index === 0 ? "eager" : "lazy"}
-                  draggable="false"
-                  style={{ objectPosition: item.position }}
-                />
-
-                <div className="service-image-shade"></div>
-
-                <div className="service-image-meta">
-                  <span>{item.meta}</span>
-                </div>
-
-                <div className="service-image-glass">
-                  <div>
-                    <h3>{item.label}</h3>
-                    <p>{item.subtitle}</p>
-                  </div>
-                  <span className="service-image-open" aria-hidden="true">→</span>
-                </div>
-              </a>
-            );
-          })}
-        </div>
-
-        <div className="service-carousel-controls">
-          <button type="button" onClick={() => move(-1)} aria-label="Vorherige Leistung">←</button>
-          <div className="service-carousel-dots" aria-hidden="true">
+      <div className="cylinder-carousel-wrap">
+        <div className="cylinder-carousel-stage" ref={stageRef}>
+          <div className="cylinder-carousel-origin">
             {serviceCards.map((item, index) => (
-              <button
+              <ServiceCylinderCard
+                item={item}
+                index={index}
                 key={item.id}
-                className={activeIndex === index ? "active" : ""}
-                type="button"
-                onClick={() => setActiveIndex(index)}
-                tabIndex="-1"
-              ></button>
+                cardRef={(el) => { cardsRefs.current[index] = el; }}
+              />
             ))}
           </div>
-          <button type="button" onClick={() => move(1)} aria-label="Nächste Leistung">→</button>
         </div>
+
+        <p className="cylinder-carousel-hint">Bewegen · ansehen · öffnen</p>
       </div>
     </section>
   );
