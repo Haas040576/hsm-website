@@ -372,9 +372,12 @@ function CapabilitiesSection() {
   const stageRef = useRef(null);
   const cardsRefs = useRef([]);
   const frameRef = useRef(0);
-  const progressRef = useRef(0);
+  const currentProgressRef = useRef(0);
+  const targetProgressRef = useRef(0);
+  const snapTimerRef = useRef(0);
   const metricsRef = useRef({ cardW: 320, cardH: 201 });
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
+  const dragRef = useRef({ active: false, startX: 0, startProgress: 0, moved: false });
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -392,10 +395,10 @@ function CapabilitiesSection() {
       const w = window.innerWidth;
       const h = window.innerHeight;
 
-      let cardW = Math.round(w * 0.16 + 120);
-      const heightFactor = Math.min(1, Math.max(0.72, h / 860));
+      let cardW = Math.round(w * 0.135 + 120);
+      const heightFactor = Math.min(1, Math.max(0.78, h / 900));
       cardW = Math.round(cardW * heightFactor);
-      cardW = Math.min(336, Math.max(210, cardW));
+      cardW = Math.min(318, Math.max(220, cardW));
 
       const cardH = Math.round(cardW / 1.5925);
       metricsRef.current = { cardW, cardH };
@@ -409,13 +412,72 @@ function CapabilitiesSection() {
       });
     }
 
-    function handleMouseMove(event) {
+    function scheduleSnap() {
+      window.clearTimeout(snapTimerRef.current);
+      snapTimerRef.current = window.setTimeout(() => {
+        targetProgressRef.current = Math.round(targetProgressRef.current);
+      }, 130);
+    }
+
+    function handleWheel(event) {
       const rect = stage.getBoundingClientRect();
-      const rx = (event.clientX - (rect.left + rect.width / 2)) / Math.max(1, rect.width / 2);
-      const ry = (event.clientY - (rect.top + rect.height / 2)) / Math.max(1, rect.height / 2);
+      const visible = rect.bottom > 0 && rect.top < window.innerHeight;
+      if (!visible) return;
+
+      const primary =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY;
+
+      if (Math.abs(primary) < 2) return;
+
+      targetProgressRef.current += primary * 0.00215;
+      scheduleSnap();
+    }
+
+    function handlePointerDown(event) {
+      dragRef.current = {
+        active: true,
+        startX: event.clientX,
+        startProgress: targetProgressRef.current,
+        moved: false,
+      };
+      stage.setPointerCapture?.(event.pointerId);
+      stage.classList.add("is-dragging");
+    }
+
+    function handlePointerMove(event) {
+      const rect = stage.getBoundingClientRect();
+      const rx =
+        (event.clientX - (rect.left + rect.width / 2)) /
+        Math.max(1, rect.width / 2);
+      const ry =
+        (event.clientY - (rect.top + rect.height / 2)) /
+        Math.max(1, rect.height / 2);
 
       mouseRef.current.targetX = clamp(rx, -1, 1);
       mouseRef.current.targetY = clamp(ry, -1, 1);
+
+      if (!dragRef.current.active) return;
+
+      const dx = event.clientX - dragRef.current.startX;
+      if (Math.abs(dx) > 6) dragRef.current.moved = true;
+
+      targetProgressRef.current =
+        dragRef.current.startProgress - dx / 210;
+    }
+
+    function endDrag(event) {
+      if (!dragRef.current.active) return;
+
+      dragRef.current.active = false;
+      stage.releasePointerCapture?.(event.pointerId);
+      stage.classList.remove("is-dragging");
+      targetProgressRef.current = Math.round(targetProgressRef.current);
+
+      window.setTimeout(() => {
+        dragRef.current.moved = false;
+      }, 0);
     }
 
     function handleMouseLeave() {
@@ -425,123 +487,105 @@ function CapabilitiesSection() {
 
     function renderLoop() {
       const cards = cardsRefs.current;
-      const cardCount = serviceCards.length;
+      const count = serviceCards.length;
       const { cardH } = metricsRef.current;
-      const h = stage.clientHeight || window.innerHeight;
-      const D = 1350;
+      const h = stage.clientHeight || 480;
 
-      progressRef.current += 0.0016;
+      currentProgressRef.current +=
+        (targetProgressRef.current - currentProgressRef.current) * 0.095;
 
-      mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.08;
-      mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.08;
+      mouseRef.current.x +=
+        (mouseRef.current.targetX - mouseRef.current.x) * 0.08;
+      mouseRef.current.y +=
+        (mouseRef.current.targetY - mouseRef.current.y) * 0.08;
 
-      const continuousProgress = progressRef.current;
-      const roundedIndex = Math.round(continuousProgress);
-      const diffFromRound = continuousProgress - roundedIndex;
-      const easedDiff =
-        Math.sign(diffFromRound) *
-        Math.pow(Math.abs(diffFromRound) * 2, 4.2) /
-        2;
-      const virtualActiveIndex = roundedIndex + easedDiff;
+      const progress = currentProgressRef.current;
 
-      for (let i = 0; i < cardCount; i += 1) {
+      for (let i = 0; i < count; i += 1) {
         const card = cards[i];
         if (!card) continue;
 
-        let offset = i - virtualActiveIndex;
-        const halfCount = cardCount / 2;
+        let offset = i - progress;
+        const half = count / 2;
 
-        while (offset > halfCount) offset -= cardCount;
-        while (offset < -halfCount) offset += cardCount;
+        while (offset > half) offset -= count;
+        while (offset < -half) offset += count;
 
         const absOffset = Math.abs(offset);
-        const sign = Math.sign(offset);
+        const sign = Math.sign(offset) || 1;
 
-        if (absOffset > 3) {
-          card.style.visibility = "hidden";
+        if (absOffset > 1.78) {
+          card.style.opacity = "0";
           card.style.pointerEvents = "none";
+          card.style.visibility = "hidden";
           continue;
         }
 
         card.style.visibility = "visible";
 
-        const gap = 28;
-        const peekAmount = -38;
+        const firstT = Math.min(absOffset, 1);
+        const easedFirst = smoothstep(firstT);
 
-        let y = 0;
-        let z = 0;
-        let rot = 0;
+        const firstY = cardH + 24;
+        let y = -sign * easedFirst * firstY;
+        let z = 360 + easedFirst * (205 - 360);
+        let rotX = -sign * easedFirst * 96;
 
-        if (absOffset <= 1) {
-          const t = absOffset;
-          const easedT = smoothstep(t);
+        if (absOffset > 1) {
+          const t = smoothstep((absOffset - 1) / 0.78);
+          const edgeY = Math.max(firstY + 76, h * 0.46);
 
-          y = -sign * (easedT * (cardH + gap));
-          z = 400 + easedT * (220 - 400);
-          rot = easedT * 132;
-        } else if (absOffset <= 2) {
-          const t = absOffset - 1;
-          const easedT = smoothstep(t);
-
-          const yStart = cardH + gap;
-          const zStart = 220;
-          const rotStart = 132;
-          const zEnd = -60;
-          const rotEnd = 175;
-
-          const scaleEnd = D / (D - zEnd);
-          const yEnd = (h / 2 - peekAmount) / scaleEnd - cardH / 2;
-
-          y = -sign * (yStart + easedT * (yEnd - yStart));
-          z = zStart + easedT * (zEnd - zStart);
-          rot = rotStart + easedT * (rotEnd - rotStart);
-        } else {
-          const t = Math.min(absOffset - 2, 1);
-          const easedT = smoothstep(t);
-
-          const zStart = -60;
-          const zEnd = -250;
-          const scaleStart = D / (D - zStart);
-          const scaleEnd = D / (D - zEnd);
-          const yStart = (h / 2 - peekAmount) / scaleStart - cardH / 2;
-          const yEnd = (h / 2 + 90) / scaleEnd + cardH / 2;
-
-          y = -sign * (yStart + easedT * (yEnd - yStart));
-          z = zStart + easedT * (zEnd - zStart);
-          rot = 175 + easedT * 20;
+          y = -sign * (firstY + t * (edgeY - firstY));
+          z = 205 + t * (-90 - 205);
+          rotX = -sign * (96 + t * 54);
         }
 
         const centerFactor = Math.max(0, 1 - absOffset);
-        const activeTiltX = -mouseRef.current.y * 12 * centerFactor;
-        const activeTiltY = mouseRef.current.x * 15 * centerFactor;
-        const totalRotX = -sign * rot + activeTiltX;
-        const totalRotY = activeTiltY;
+        const tiltX = -mouseRef.current.y * 8 * centerFactor;
+        const tiltY = mouseRef.current.x * 10 * centerFactor;
+
+        const fade =
+          absOffset <= 1
+            ? 1
+            : 1 - smoothstep((absOffset - 1) / 0.78);
 
         card.style.zIndex = String(Math.round(z + 500));
-        card.style.opacity = "1";
-        card.style.pointerEvents = absOffset < 0.58 ? "auto" : "none";
+        card.style.opacity = String(clamp(fade, 0, 1));
+        card.style.pointerEvents =
+          absOffset < 0.48 && !dragRef.current.moved ? "auto" : "none";
+
         card.style.transform =
           "translateY(" + y.toFixed(2) + "px) " +
           "translateZ(" + z.toFixed(2) + "px) " +
-          "rotateX(" + totalRotX.toFixed(2) + "deg) " +
-          "rotateY(" + totalRotY.toFixed(2) + "deg) " +
-          "rotateZ(-3deg)";
+          "rotateX(" + (rotX + tiltX).toFixed(2) + "deg) " +
+          "rotateY(" + tiltY.toFixed(2) + "deg) " +
+          "rotateZ(-2deg)";
       }
 
       frameRef.current = requestAnimationFrame(renderLoop);
     }
 
     updateMetrics();
+
     window.addEventListener("resize", updateMetrics);
-    stage.addEventListener("mousemove", handleMouseMove);
+    stage.addEventListener("wheel", handleWheel, { passive: true });
+    stage.addEventListener("pointerdown", handlePointerDown);
+    stage.addEventListener("pointermove", handlePointerMove);
+    stage.addEventListener("pointerup", endDrag);
+    stage.addEventListener("pointercancel", endDrag);
     stage.addEventListener("mouseleave", handleMouseLeave);
 
     frameRef.current = requestAnimationFrame(renderLoop);
 
     return () => {
       cancelAnimationFrame(frameRef.current);
+      window.clearTimeout(snapTimerRef.current);
       window.removeEventListener("resize", updateMetrics);
-      stage.removeEventListener("mousemove", handleMouseMove);
+      stage.removeEventListener("wheel", handleWheel);
+      stage.removeEventListener("pointerdown", handlePointerDown);
+      stage.removeEventListener("pointermove", handlePointerMove);
+      stage.removeEventListener("pointerup", endDrag);
+      stage.removeEventListener("pointercancel", endDrag);
       stage.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
@@ -566,6 +610,8 @@ function CapabilitiesSection() {
             ))}
           </div>
         </div>
+
+        <p className="cylinder-carousel-hint">Scrollen oder ziehen</p>
       </div>
     </section>
   );
