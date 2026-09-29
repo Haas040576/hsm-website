@@ -285,7 +285,7 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
 .capabilities-section{
   position:relative;
   z-index:2;
-  overflow:hidden;
+  overflow:visible;
   min-height:260vh;
   padding:0;
   background:
@@ -296,11 +296,14 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
 .capabilities-sticky{
   position:sticky;
   top:0;
+  height:100svh;
   min-height:100svh;
   display:flex;
   flex-direction:column;
   justify-content:center;
+  overflow:hidden;
   padding:82px 0 56px;
+  isolation:isolate;
 }
 .capabilities-heading{
   width:min(900px,calc(100% - 40px));
@@ -383,14 +386,17 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
   border-radius:18px;
 }
 .cylinder-card-edge{
-  background:#8e9896;
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);
+  background:#1b1f1d;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);
 }
 .cylinder-card-face{
   border:1px solid rgba(255,255,255,.24);
   background:#1a201d;
   backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  transform-style:preserve-3d;
+  -webkit-transform-style:preserve-3d;
   box-shadow:
     0 26px 70px rgba(20,29,31,.22),
     inset 0 1px 0 rgba(255,255,255,.16);
@@ -421,13 +427,13 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
   padding:0 9px;
   border:1px solid rgba(255,255,255,.30);
   border-radius:999px;
-  background:rgba(12,20,17,.24);
-  color:rgba(255,255,255,.92);
+  background:rgba(14,20,18,.70);
+  color:#fff;
   font-size:8px;
   font-weight:700;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
-  backdrop-filter:blur(14px) saturate(120%);
-  -webkit-backdrop-filter:blur(14px) saturate(120%);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
 }
 .cylinder-card-glass{
   position:absolute;
@@ -443,12 +449,12 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
   padding:12px 11px 11px 13px;
   border:1px solid rgba(255,255,255,.35);
   border-radius:14px;
-  background:rgba(11,18,16,.29);
+  background:linear-gradient(180deg,rgba(15,21,19,.76),rgba(10,15,13,.72));
   box-shadow:
     0 18px 46px rgba(8,13,12,.14),
     inset 0 1px 0 rgba(255,255,255,.17);
-  backdrop-filter:blur(22px) saturate(135%);
-  -webkit-backdrop-filter:blur(22px) saturate(135%);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
 }
 .cylinder-card-glass>span{
   display:block;
@@ -518,7 +524,8 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
   border:1px solid rgba(255,255,255,.16);
   border-radius:13px;
   background:rgba(255,255,255,.08);
-  backdrop-filter:blur(16px);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
 }
 .cylinder-card-back-copy small{
   display:block;
