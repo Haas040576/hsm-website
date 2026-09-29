@@ -332,12 +332,17 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
 .cylinder-carousel-stage{
   position:relative;
   width:100%;
-  height:520px;
-  min-height:520px;
+  height:480px;
+  min-height:480px;
   perspective:1350px;
   perspective-origin:50% 50%;
   transform-style:preserve-3d;
   overflow:hidden;
+  cursor:grab;
+  touch-action:pan-y;
+}
+.cylinder-carousel-stage.is-dragging{
+  cursor:grabbing;
 }
 .cylinder-carousel-origin{
   position:absolute;
@@ -532,7 +537,7 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
   line-height:1.4;
 }
 .cylinder-carousel-hint{
-  margin:4px 0 0;
+  margin:-2px 0 0;
   text-align:center;
   color:#7c8480;
   font-size:10px;
@@ -591,8 +596,8 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
 
 @media(max-width:1000px){
   .cylinder-carousel-stage{
-    height:500px;
-    min-height:500px;
+    height:460px;
+    min-height:460px;
   }
 }
 @media(max-width:760px){
@@ -610,8 +615,8 @@ footer{background:#07100e;color:#fff;padding:30px 0}.footer-inner{display:flex;a
     font-size:14px;
   }
   .cylinder-carousel-stage{
-    height:460px;
-    min-height:460px;
+    height:420px;
+    min-height:420px;
     perspective:1100px;
   }
   .cylinder-card-face,
