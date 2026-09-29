@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://haas-saida-media.de/sitemap.xml
