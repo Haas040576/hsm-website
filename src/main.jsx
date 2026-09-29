@@ -476,10 +476,10 @@ const academyFormats = [
     tags: ["KI Beratung", "Prozessanalyse", "Automatisierung"],
   },
   {
-    label: "Digitale Kurse für Privatpersonen",
-    title: "KI, Smartphone und Social Media verständlich erklärt.",
-    text: "Persönlich und ohne Fachsprache. Für Einsteiger, ältere Menschen und alle, die digital sicherer werden möchten.",
-    tags: ["KI Kurs", "Smartphone Kurs", "Social Media Kurs"],
+    label: "KI Beratung für Unternehmen",
+    title: "Von der Idee zum sinnvollen KI-Einsatz.",
+    text: "Wir prüfen Prozesse, priorisieren konkrete Anwendungsfälle und zeigen, welche KI-Werkzeuge oder Automatisierungen zum Unternehmen passen.",
+    tags: ["KI Beratung München", "KI Strategie", "Automatisierung"],
   },
 ];
 
@@ -618,7 +618,7 @@ function AcademyPage() {
                 <span>{format.label}</span>
                 <div className="academy-format-ui">
                   <i></i><i></i><i></i>
-                  <b>{index === 0 ? "Team Workshop" : index === 1 ? "Prozess Check" : "Digital Kurs"}</b>
+                  <b>{index === 0 ? "Team Workshop" : index === 1 ? "Prozess Check" : "KI Beratung"}</b>
                 </div>
               </div>
               <div className="academy-format-copy">
