@@ -369,19 +369,19 @@ function ServiceCylinderCard({ item, cardRef }) {
 }
 
 function CapabilitiesSection() {
+  const sectionRef = useRef(null);
   const stageRef = useRef(null);
   const cardsRefs = useRef([]);
   const frameRef = useRef(0);
   const currentProgressRef = useRef(0);
   const targetProgressRef = useRef(0);
-  const snapTimerRef = useRef(0);
-  const metricsRef = useRef({ cardW: 320, cardH: 201 });
+  const metricsRef = useRef({ cardW: 300, cardH: 188 });
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
-  const dragRef = useRef({ active: false, startX: 0, startProgress: 0, moved: false });
 
   useEffect(() => {
+    const section = sectionRef.current;
     const stage = stageRef.current;
-    if (!stage) return undefined;
+    if (!section || !stage) return undefined;
 
     function clamp(v, a, b) {
       return Math.max(a, Math.min(b, v));
@@ -395,10 +395,10 @@ function CapabilitiesSection() {
       const w = window.innerWidth;
       const h = window.innerHeight;
 
-      let cardW = Math.round(w * 0.135 + 120);
-      const heightFactor = Math.min(1, Math.max(0.78, h / 900));
+      let cardW = Math.round(w * 0.115 + 120);
+      const heightFactor = Math.min(1, Math.max(0.8, h / 900));
       cardW = Math.round(cardW * heightFactor);
-      cardW = Math.min(318, Math.max(220, cardW));
+      cardW = Math.min(300, Math.max(215, cardW));
 
       const cardH = Math.round(cardW / 1.5925);
       metricsRef.current = { cardW, cardH };
@@ -410,43 +410,24 @@ function CapabilitiesSection() {
         card.style.marginLeft = -(cardW / 2) + "px";
         card.style.marginTop = -(cardH / 2) + "px";
       });
+
+      updateScrollProgress();
     }
 
-    function scheduleSnap() {
-      window.clearTimeout(snapTimerRef.current);
-      snapTimerRef.current = window.setTimeout(() => {
-        targetProgressRef.current = Math.round(targetProgressRef.current);
-      }, 130);
+    function updateScrollProgress() {
+      const sectionTop =
+        section.getBoundingClientRect().top + window.scrollY;
+      const scrollRange = Math.max(
+        1,
+        section.offsetHeight - window.innerHeight
+      );
+
+      const raw = (window.scrollY - sectionTop) / scrollRange;
+      targetProgressRef.current =
+        clamp(raw, 0, 1) * (serviceCards.length - 1);
     }
 
-    function handleWheel(event) {
-      const rect = stage.getBoundingClientRect();
-      const visible = rect.bottom > 0 && rect.top < window.innerHeight;
-      if (!visible) return;
-
-      const primary =
-        Math.abs(event.deltaX) > Math.abs(event.deltaY)
-          ? event.deltaX
-          : event.deltaY;
-
-      if (Math.abs(primary) < 2) return;
-
-      targetProgressRef.current += primary * 0.00215;
-      scheduleSnap();
-    }
-
-    function handlePointerDown(event) {
-      dragRef.current = {
-        active: true,
-        startX: event.clientX,
-        startProgress: targetProgressRef.current,
-        moved: false,
-      };
-      stage.setPointerCapture?.(event.pointerId);
-      stage.classList.add("is-dragging");
-    }
-
-    function handlePointerMove(event) {
+    function handleMouseMove(event) {
       const rect = stage.getBoundingClientRect();
       const rx =
         (event.clientX - (rect.left + rect.width / 2)) /
@@ -457,27 +438,6 @@ function CapabilitiesSection() {
 
       mouseRef.current.targetX = clamp(rx, -1, 1);
       mouseRef.current.targetY = clamp(ry, -1, 1);
-
-      if (!dragRef.current.active) return;
-
-      const dx = event.clientX - dragRef.current.startX;
-      if (Math.abs(dx) > 6) dragRef.current.moved = true;
-
-      targetProgressRef.current =
-        dragRef.current.startProgress - dx / 210;
-    }
-
-    function endDrag(event) {
-      if (!dragRef.current.active) return;
-
-      dragRef.current.active = false;
-      stage.releasePointerCapture?.(event.pointerId);
-      stage.classList.remove("is-dragging");
-      targetProgressRef.current = Math.round(targetProgressRef.current);
-
-      window.setTimeout(() => {
-        dragRef.current.moved = false;
-      }, 0);
     }
 
     function handleMouseLeave() {
@@ -487,12 +447,11 @@ function CapabilitiesSection() {
 
     function renderLoop() {
       const cards = cardsRefs.current;
-      const count = serviceCards.length;
       const { cardH } = metricsRef.current;
-      const h = stage.clientHeight || 480;
+      const h = stage.clientHeight || 460;
 
       currentProgressRef.current +=
-        (targetProgressRef.current - currentProgressRef.current) * 0.095;
+        (targetProgressRef.current - currentProgressRef.current) * 0.115;
 
       mouseRef.current.x +=
         (mouseRef.current.targetX - mouseRef.current.x) * 0.08;
@@ -501,20 +460,15 @@ function CapabilitiesSection() {
 
       const progress = currentProgressRef.current;
 
-      for (let i = 0; i < count; i += 1) {
+      for (let i = 0; i < serviceCards.length; i += 1) {
         const card = cards[i];
         if (!card) continue;
 
-        let offset = i - progress;
-        const half = count / 2;
-
-        while (offset > half) offset -= count;
-        while (offset < -half) offset += count;
-
+        const offset = i - progress;
         const absOffset = Math.abs(offset);
         const sign = Math.sign(offset) || 1;
 
-        if (absOffset > 1.78) {
+        if (absOffset > 1.72) {
           card.style.opacity = "0";
           card.style.pointerEvents = "none";
           card.style.visibility = "hidden";
@@ -526,92 +480,87 @@ function CapabilitiesSection() {
         const firstT = Math.min(absOffset, 1);
         const easedFirst = smoothstep(firstT);
 
-        const firstY = cardH + 24;
-        let y = -sign * easedFirst * firstY;
-        let z = 360 + easedFirst * (205 - 360);
-        let rotX = -sign * easedFirst * 96;
+        const firstY = cardH + 26;
+        let y = sign * easedFirst * firstY;
+        let z = 360 + easedFirst * (215 - 360);
+        let rotX = sign * easedFirst * 82;
 
         if (absOffset > 1) {
-          const t = smoothstep((absOffset - 1) / 0.78);
-          const edgeY = Math.max(firstY + 76, h * 0.46);
+          const t = smoothstep((absOffset - 1) / 0.72);
+          const edgeY = Math.max(firstY + 64, h * 0.43);
 
-          y = -sign * (firstY + t * (edgeY - firstY));
-          z = 205 + t * (-90 - 205);
-          rotX = -sign * (96 + t * 54);
+          y = sign * (firstY + t * (edgeY - firstY));
+          z = 215 + t * (-70 - 215);
+          rotX = sign * (82 + t * 36);
         }
 
         const centerFactor = Math.max(0, 1 - absOffset);
-        const tiltX = -mouseRef.current.y * 8 * centerFactor;
-        const tiltY = mouseRef.current.x * 10 * centerFactor;
+        const tiltX = -mouseRef.current.y * 6 * centerFactor;
+        const tiltY = mouseRef.current.x * 8 * centerFactor;
 
         const fade =
           absOffset <= 1
             ? 1
-            : 1 - smoothstep((absOffset - 1) / 0.78);
+            : 1 - smoothstep((absOffset - 1) / 0.72);
 
         card.style.zIndex = String(Math.round(z + 500));
         card.style.opacity = String(clamp(fade, 0, 1));
-        card.style.pointerEvents =
-          absOffset < 0.48 && !dragRef.current.moved ? "auto" : "none";
+        card.style.pointerEvents = absOffset < 0.38 ? "auto" : "none";
 
         card.style.transform =
           "translateY(" + y.toFixed(2) + "px) " +
           "translateZ(" + z.toFixed(2) + "px) " +
           "rotateX(" + (rotX + tiltX).toFixed(2) + "deg) " +
           "rotateY(" + tiltY.toFixed(2) + "deg) " +
-          "rotateZ(-2deg)";
+          "rotateZ(-1.5deg)";
       }
 
       frameRef.current = requestAnimationFrame(renderLoop);
     }
 
     updateMetrics();
+    updateScrollProgress();
 
     window.addEventListener("resize", updateMetrics);
-    stage.addEventListener("wheel", handleWheel, { passive: true });
-    stage.addEventListener("pointerdown", handlePointerDown);
-    stage.addEventListener("pointermove", handlePointerMove);
-    stage.addEventListener("pointerup", endDrag);
-    stage.addEventListener("pointercancel", endDrag);
+    window.addEventListener("scroll", updateScrollProgress, { passive: true });
+    stage.addEventListener("mousemove", handleMouseMove);
     stage.addEventListener("mouseleave", handleMouseLeave);
 
     frameRef.current = requestAnimationFrame(renderLoop);
 
     return () => {
       cancelAnimationFrame(frameRef.current);
-      window.clearTimeout(snapTimerRef.current);
       window.removeEventListener("resize", updateMetrics);
-      stage.removeEventListener("wheel", handleWheel);
-      stage.removeEventListener("pointerdown", handlePointerDown);
-      stage.removeEventListener("pointermove", handlePointerMove);
-      stage.removeEventListener("pointerup", endDrag);
-      stage.removeEventListener("pointercancel", endDrag);
+      window.removeEventListener("scroll", updateScrollProgress);
+      stage.removeEventListener("mousemove", handleMouseMove);
       stage.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
 
   return (
-    <section className="capabilities-section" id="services">
-      <div className="capabilities-heading">
-        <span>HSM</span>
-        <h2>Was wir machen</h2>
-        <p>Vier Bereiche. Ein digitaler Partner.</p>
-      </div>
-
-      <div className="cylinder-carousel-wrap">
-        <div className="cylinder-carousel-stage" ref={stageRef}>
-          <div className="cylinder-carousel-origin">
-            {serviceCards.map((item, index) => (
-              <ServiceCylinderCard
-                item={item}
-                key={item.id}
-                cardRef={(el) => { cardsRefs.current[index] = el; }}
-              />
-            ))}
-          </div>
+    <section className="capabilities-section" id="services" ref={sectionRef}>
+      <div className="capabilities-sticky">
+        <div className="capabilities-heading">
+          <span>HSM</span>
+          <h2>Was wir machen</h2>
+          <p>Vier Bereiche. Ein digitaler Partner.</p>
         </div>
 
-        <p className="cylinder-carousel-hint">Scrollen oder ziehen</p>
+        <div className="cylinder-carousel-wrap">
+          <div className="cylinder-carousel-stage" ref={stageRef}>
+            <div className="cylinder-carousel-origin">
+              {serviceCards.map((item, index) => (
+                <ServiceCylinderCard
+                  item={item}
+                  key={item.id}
+                  cardRef={(el) => { cardsRefs.current[index] = el; }}
+                />
+              ))}
+            </div>
+          </div>
+
+          <p className="cylinder-carousel-hint">Scrollen zum Wechseln</p>
+        </div>
       </div>
     </section>
   );
