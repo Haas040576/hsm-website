@@ -612,220 +612,337 @@ function usePageMeta({ title, description, path, robots = "index,follow" }) {
   }, [title, description, path, robots]);
 }
 
-const academyFormats = [
+const academyModules = [
   {
-    label: "KI Schulung für Unternehmen",
-    title: "Teams sicher und sinnvoll mit KI arbeiten lassen.",
-    text: "Für Mitarbeitende, Führungskräfte und Teams, die ChatGPT und andere KI-Werkzeuge im Arbeitsalltag einsetzen wollen.",
-    tags: ["KI Schulung Unternehmen", "ChatGPT Workshop", "Mitarbeiter Weiterbildung"],
+    key: "mitarbeiter",
+    eyebrow: "KI-Schulung für Mitarbeiter",
+    title: "KI im Arbeitsalltag sicher einsetzen.",
+    text: "Grundlagen, gute Prompts und konkrete Aufgaben aus dem Unternehmen. Geeignet für Teams, die ChatGPT und andere KI-Tools strukturiert nutzen sollen.",
+    tags: ["KI Schulung Unternehmen", "KI Schulung Mitarbeiter", "KI Weiterbildung"],
   },
   {
-    label: "KI Beratung",
-    title: "Erst verstehen, wo KI wirklich etwas bringt.",
-    text: "Wir prüfen Aufgaben und Prozesse, bevor neue Tools eingeführt werden. So entsteht ein klarer, sinnvoller Einsatz statt Tool-Chaos.",
-    tags: ["KI Beratung", "Prozessanalyse", "Automatisierung"],
+    key: "chatgpt",
+    eyebrow: "ChatGPT Schulung",
+    title: "ChatGPT und Copilot praktisch nutzen.",
+    text: "Texte, Recherche, Zusammenfassungen, Vorbereitung und wiederkehrende Aufgaben. Direkt am eigenen Arbeitsalltag statt an allgemeinen Beispielen.",
+    tags: ["ChatGPT Schulung", "Microsoft Copilot Schulung", "Prompting"],
   },
   {
-    label: "KI Beratung für Unternehmen",
-    title: "Von der Idee zum sinnvollen KI-Einsatz.",
-    text: "Wir prüfen Prozesse, priorisieren konkrete Anwendungsfälle und zeigen, welche KI-Werkzeuge oder Automatisierungen zum Unternehmen passen.",
-    tags: ["KI Beratung München", "KI Strategie", "Automatisierung"],
+    key: "kompetenz",
+    eyebrow: "KI-Kompetenz & EU AI Act",
+    title: "Regeln verstehen. KI verantwortungsvoll nutzen.",
+    text: "Sichere Nutzung, interne Leitlinien, sensible Daten und KI-Kompetenz nach Artikel 4 des EU AI Act werden verständlich in den Arbeitskontext eingeordnet.",
+    tags: ["EU AI Act Schulung", "KI Kompetenz", "KI Weiterbildung Unternehmen"],
+  },
+  {
+    key: "beratung",
+    eyebrow: "KI Beratung für Unternehmen",
+    title: "Prozesse prüfen und sinnvolle KI-Anwendungen finden.",
+    text: "Wir schauen auf bestehende Abläufe und priorisieren Einsatzmöglichkeiten, bei denen KI oder Automatisierung tatsächlich Arbeit abnimmt.",
+    tags: ["KI Beratung München", "KI Automatisierung", "Prozessanalyse"],
   },
 ];
 
 const academyFaqs = [
   {
-    q: "Für wen ist eine KI-Schulung im Unternehmen sinnvoll?",
-    a: "Für Teams und Mitarbeitende, die KI bereits nutzen oder künftig im Arbeitsalltag einsetzen sollen. Inhalte und Übungen werden an Rollen, Vorkenntnisse und typische Aufgaben angepasst.",
+    q: "Für welche Unternehmen ist eine KI-Schulung geeignet?",
+    a: "Für kleine und mittlere Unternehmen ebenso wie für einzelne Teams. Inhalte, Beispiele und Übungen können an Abteilung, Vorkenntnisse und typische Aufgaben angepasst werden.",
   },
   {
-    q: "Bietet HSM Academy KI-Schulungen in München an?",
-    a: "Ja. Workshops können vor Ort in München und Oberbayern sowie remote durchgeführt werden. Format und Umfang werden passend zum Unternehmen geplant.",
+    q: "Gibt es KI-Schulungen vor Ort in München?",
+    a: "Ja. HSM Academy bietet KI-Schulungen und Workshops vor Ort in München und Oberbayern sowie remote an.",
   },
   {
-    q: "Geht es nur um ChatGPT?",
-    a: "Nein. ChatGPT ist häufig ein guter Einstieg, aber die Schulung kann auch andere KI-Werkzeuge, sichere Nutzung, Prozessautomatisierung und konkrete Anwendungsfälle aus dem Unternehmen behandeln.",
+    q: "Was ist Inhalt einer ChatGPT Schulung?",
+    a: "Je nach Bedarf geht es um Grundlagen, Prompting, Recherche, Textarbeit, Zusammenfassungen, sichere Nutzung und konkrete Aufgaben aus dem Arbeitsalltag.",
   },
   {
-    q: "Was hat der EU AI Act mit KI-Weiterbildung zu tun?",
-    a: "Artikel 4 des EU AI Act verpflichtet Anbieter und Betreiber von KI-Systemen dazu, Maßnahmen zur Förderung von KI-Kompetenz bei Mitarbeitenden und weiteren Personen zu treffen, die KI-Systeme in ihrem Auftrag nutzen. Eine passende Schulung kann ein Baustein dafür sein.",
+    q: "Kann eine Schulung beim Thema EU AI Act und KI-Kompetenz helfen?",
+    a: "Eine Schulung kann ein Baustein sein, um KI-Kompetenz im Unternehmen aufzubauen. Inhalte können sichere Nutzung, Verantwortlichkeiten und den praktischen Umgang mit KI-Systemen abdecken.",
   },
 ];
 
 function AcademyPage() {
-  const [audience, setAudience] = useState("unternehmen");
+  const [activeModule, setActiveModule] = useState(0);
+  const [planAudience, setPlanAudience] = useState("Unternehmen");
+  const [planTopic, setPlanTopic] = useState("KI-Schulung");
+  const [planFormat, setPlanFormat] = useState("Vor Ort");
+  const pageRef = useRef(null);
+  const progressRef = useRef(null);
+  const heroVisualRef = useRef(null);
 
   usePageMeta({
-    title: "KI Schulung München für Unternehmen & Teams | HSM Academy",
-    description: "Praxisnahe KI-Schulungen, ChatGPT Workshops und KI-Beratung für Unternehmen in München, Oberbayern und remote. Dazu digitale Kurse für Privatpersonen.",
+    title: "KI-Schulung München für Unternehmen | HSM Academy",
+    description: "KI-Schulungen für Unternehmen in München und Oberbayern: ChatGPT Schulung, KI Weiterbildung für Mitarbeiter, EU AI Act KI-Kompetenz und KI Beratung.",
     path: "/academy",
   });
 
+  useEffect(() => {
+    const root = pageRef.current;
+    if (!root) return undefined;
+
+    const revealItems = Array.from(root.querySelectorAll("[data-academy-reveal]"));
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      });
+    }, { threshold: 0.14 });
+
+    revealItems.forEach((item) => revealObserver.observe(item));
+
+    const moduleItems = Array.from(root.querySelectorAll("[data-academy-module]"));
+    const moduleObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (visible) {
+        setActiveModule(Number(visible.target.dataset.academyModule || 0));
+      }
+    }, {
+      threshold: [0.3, 0.55, 0.75],
+      rootMargin: "-18% 0px -28% 0px",
+    });
+
+    moduleItems.forEach((item) => moduleObserver.observe(item));
+
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const progress = Math.min(1, Math.max(0, window.scrollY / max));
+
+        if (progressRef.current) {
+          progressRef.current.style.transform = "scaleX(" + progress + ")";
+        }
+
+        if (heroVisualRef.current) {
+          const heroRect = heroVisualRef.current.getBoundingClientRect();
+          const heroProgress = Math.min(1, Math.max(0, -heroRect.top / Math.max(1, heroRect.height)));
+          heroVisualRef.current.style.setProperty("--academy-hero-scroll", heroProgress.toFixed(3));
+        }
+
+        ticking = false;
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      revealObserver.disconnect();
+      moduleObserver.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  const plannerHref =
+    "mailto:kontakt@haas-saida-media.de?subject=" +
+    encodeURIComponent("HSM Academy – " + planTopic) +
+    "&body=" +
+    encodeURIComponent(
+      "Bereich: " + planAudience + "\nThema: " + planTopic + "\nFormat: " + planFormat + "\n\nBitte um Informationen zu einem passenden Termin."
+    );
+
   return (
-    <main className="academy-page">
-      <nav className="academy-nav">
+    <main className="academy-page academy-page-v2" ref={pageRef}>
+      <div className="academy-scroll-progress"><i ref={progressRef}></i></div>
+
+      <nav className="academy-nav academy-nav-v2">
         <a className="academy-nav-logo" href="/">HSM</a>
         <div className="academy-nav-links">
-          <a href="#unternehmen">Unternehmen</a>
+          <a href="#schulungen">Schulungen</a>
           <a href="#privat">Privat</a>
-          <a href="#faq">FAQ</a>
+          <a href="#planen">Seminar planen</a>
         </div>
-        <a className="academy-nav-cta" href="mailto:kontakt@haas-saida-media.de?subject=HSM%20Academy%20Anfrage">Seminar anfragen</a>
+        <a className="academy-nav-cta" href="#planen">Anfragen</a>
       </nav>
 
-      <section className="academy-hero">
-        <div className="academy-hero-backdrop"></div>
-        <div className="academy-hero-grid">
-          <div className="academy-hero-copy">
-            <span className="academy-page-kicker">HSM Academy</span>
-            <h1>KI-Schulungen für Unternehmen.<br/>Digitale Kurse für Menschen.</h1>
-            <p>Praxisnah, verständlich und auf den echten Alltag zugeschnitten – vor Ort in München und Oberbayern oder remote.</p>
+      <section className="academy-v2-hero">
+        <div className="academy-v2-hero-copy" data-academy-reveal>
+          <span className="academy-page-kicker">HSM Academy</span>
+          <h1>KI-Schulungen für Unternehmen in München.</h1>
+          <p>ChatGPT Schulung, KI Weiterbildung für Mitarbeiter und KI Beratung – vor Ort in München und Oberbayern oder remote.</p>
 
-            <div className="academy-hero-actions">
-              <a href="#unternehmen">Für Unternehmen</a>
-              <a href="#privat" className="light">Für Privatpersonen</a>
-            </div>
-
-            <div className="academy-keywords" aria-label="Schwerpunkte">
-              <span>ChatGPT Schulung</span>
-              <span>KI Weiterbildung</span>
-              <span>KI Beratung</span>
-            </div>
+          <div className="academy-v2-actions">
+            <a href="#schulungen">Schulungen ansehen</a>
+            <a className="secondary" href="#planen">Seminar anfragen</a>
           </div>
 
-          <div className="academy-hero-visual">
-            <img
-              src="https://images.unsplash.com/photo-1769839271768-aee5469799ee?auto=format&fit=crop&w=1800&q=92"
-              alt="Dozent erklärt Inhalte in einem Business-Seminar"
-            />
-            <div className="academy-hero-shade"></div>
+          <div className="academy-v2-keywords">
+            <span>KI Schulung Unternehmen</span>
+            <span>ChatGPT Schulung</span>
+            <span>KI Beratung München</span>
+          </div>
+        </div>
 
-            <div className="academy-hero-panel panel-team">
-              <small>Unternehmen</small>
-              <b>KI im Arbeitsalltag</b>
-              <span>Workshop für Teams</span>
-            </div>
+        <div className="academy-v2-visual" ref={heroVisualRef} data-academy-reveal>
+          <img
+            src="https://images.unsplash.com/photo-1769839271768-aee5469799ee?auto=format&fit=crop&w=1900&q=92"
+            alt="Business-Seminar mit Dozent vor einer Gruppe"
+          />
+          <div className="academy-v2-visual-shade"></div>
 
-            <div className="academy-hero-panel panel-private">
-              <small>Privat</small>
-              <b>Digital sicherer werden</b>
-              <span>KI, Smartphone & Social Media</span>
-            </div>
-
-            <div className="academy-hero-panel panel-ai">
-              <small>KI Beratung</small>
-              <b>Potenziale erkennen</b>
-            </div>
+          <div className="academy-v2-float float-one">
+            <small>Inhouse</small>
+            <b>KI-Schulung für Teams</b>
+          </div>
+          <div className="academy-v2-float float-two">
+            <small>Praxis</small>
+            <b>ChatGPT & Copilot</b>
+          </div>
+          <div className="academy-v2-float float-three">
+            <small>KI-Kompetenz</small>
+            <b>EU AI Act</b>
           </div>
         </div>
       </section>
 
-      <section className="academy-switch-section">
-        <div className="academy-switch-copy">
-          <span>HSM Academy</span>
-          <h2>Was passt zu dir?</h2>
-        </div>
-
-        <div className="academy-segmented">
-          <button className={audience === "unternehmen" ? "active" : ""} onClick={() => setAudience("unternehmen")}>Unternehmen</button>
-          <button className={audience === "privat" ? "active" : ""} onClick={() => setAudience("privat")}>Privatpersonen</button>
-        </div>
-
-        <div className="academy-focus-card">
-          {audience === "unternehmen" ? (
-            <>
-              <div>
-                <span>KI Schulung für Unternehmen</span>
-                <h3>Von den Grundlagen bis zum konkreten Einsatz im Team.</h3>
-              </div>
-              <p>ChatGPT, KI-Tools, sichere Nutzung und echte Anwendungsfälle aus dem Unternehmen. Kein allgemeiner Vortrag, sondern Weiterbildung mit direktem Bezug zum Arbeitsalltag.</p>
-              <a href="#unternehmen">Unternehmensangebote ansehen</a>
-            </>
-          ) : (
-            <>
-              <div>
-                <span>Digitale Weiterbildung</span>
-                <h3>Technik verstehen, ohne Technik-Sprache lernen zu müssen.</h3>
-              </div>
-              <p>KI, Smartphone, WhatsApp, Social Media und digitale Sicherheit werden Schritt für Schritt erklärt – für Einsteiger und ältere Menschen.</p>
-              <a href="#privat">Private Kurse ansehen</a>
-            </>
-          )}
-        </div>
+      <section className="academy-v2-intro" data-academy-reveal>
+        <span>Für Unternehmen</span>
+        <h2>KI verstehen. Im Arbeitsalltag anwenden.</h2>
+        <p>Die Inhalte werden an Team, Branche und konkrete Aufgaben angepasst. Der Schwerpunkt liegt auf Anwendungen, die Mitarbeitende direkt nutzen können.</p>
       </section>
 
-      <section className="academy-formats" id="unternehmen">
-        <div className="academy-section-head">
-          <span>Unternehmen</span>
-          <h2>KI-Schulung, Beratung und Weiterbildung für Teams.</h2>
-          <p>Für Unternehmen in München, Oberbayern und deutschlandweit remote.</p>
+      <section className="academy-v2-story" id="schulungen">
+        <div className="academy-v2-story-sticky">
+          <div className="academy-v2-story-card">
+            <div className="academy-v2-story-top">
+              <span>HSM Academy</span>
+              <i>{String(activeModule + 1).padStart(2, "0")} / {String(academyModules.length).padStart(2, "0")}</i>
+            </div>
+
+            <div className="academy-v2-story-visual">
+              <div className={"academy-v2-orb module-" + academyModules[activeModule].key}></div>
+              <div className="academy-v2-story-window">
+                <small>{academyModules[activeModule].eyebrow}</small>
+                <b>{academyModules[activeModule].title}</b>
+                <div className="academy-v2-story-lines"><i></i><i></i><i></i></div>
+              </div>
+            </div>
+
+            <div className="academy-v2-story-tags">
+              {academyModules[activeModule].tags.map((tag) => <span key={tag}>{tag}</span>)}
+            </div>
+          </div>
         </div>
 
-        <div className="academy-format-grid">
-          {academyFormats.map((format, index) => (
-            <article className="academy-format-card" key={format.label}>
-              <div className={"academy-format-visual visual-" + index}>
-                <span>{format.label}</span>
-                <div className="academy-format-ui">
-                  <i></i><i></i><i></i>
-                  <b>{index === 0 ? "Team Workshop" : index === 1 ? "Prozess Check" : "KI Beratung"}</b>
-                </div>
-              </div>
-              <div className="academy-format-copy">
-                <span>{format.label}</span>
-                <h3>{format.title}</h3>
-                <p>{format.text}</p>
-                <div className="academy-format-tags">
-                  {format.tags.map((tag) => <i key={tag}>{tag}</i>)}
-                </div>
-              </div>
+        <div className="academy-v2-story-steps">
+          {academyModules.map((module, index) => (
+            <article
+              className={"academy-v2-step " + (activeModule === index ? "is-active" : "")}
+              key={module.key}
+              data-academy-module={index}
+              data-academy-reveal
+            >
+              <span>{module.eyebrow}</span>
+              <h3>{module.title}</h3>
+              <p>{module.text}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="academy-ai-act">
-        <div className="academy-ai-act-card">
-          <div>
-            <span>KI-Kompetenz im Unternehmen</span>
-            <h2>EU AI Act nicht nur abhaken. Mitarbeitende wirklich befähigen.</h2>
-          </div>
-          <p>Artikel 4 des EU AI Act verlangt Maßnahmen zur Förderung von KI-Kompetenz bei Personen, die KI-Systeme im Auftrag eines Unternehmens nutzen. HSM Academy verbindet dieses Thema mit konkreten Anwendungen im Arbeitsalltag.</p>
-        </div>
-      </section>
-
-      <section className="academy-private-section" id="privat">
-        <div className="academy-private-visual">
-          <div className="academy-private-phone">
-            <div></div>
-            <span>Nachrichten</span>
-            <span>Fotos</span>
-            <span>Social Media</span>
-          </div>
-          <div className="academy-private-glass one"><small>KI</small><b>ChatGPT verstehen</b></div>
-          <div className="academy-private-glass two"><small>Smartphone</small><b>Sicher im Alltag</b></div>
-        </div>
-
-        <div className="academy-private-copy">
-          <span>Für Privatpersonen</span>
-          <h2>Digital einfach verstehen.</h2>
-          <p>Persönliche Kurse zu KI, Smartphone, Social Media und digitaler Sicherheit. Ruhig erklärt, ohne Fachbegriffe und angepasst an das eigene Tempo.</p>
-          <div className="academy-private-tags">
+      <section className="academy-v2-private" id="privat">
+        <div className="academy-v2-private-visual" data-academy-reveal>
+          <div className="academy-v2-device">
+            <i></i>
             <span>KI & ChatGPT</span>
             <span>Smartphone</span>
             <span>Social Media</span>
+          </div>
+          <div className="academy-v2-private-chip chip-a">KI Kurs für Anfänger</div>
+          <div className="academy-v2-private-chip chip-b">Smartphone Kurs</div>
+        </div>
+
+        <div className="academy-v2-private-copy" data-academy-reveal>
+          <span>Für Privatpersonen</span>
+          <h2>KI, Smartphone und Social Media verständlich erklärt.</h2>
+          <p>Kurse für Einsteiger und ältere Menschen. Schritt für Schritt, ohne Fachbegriffe und mit Zeit für individuelle Fragen.</p>
+          <div className="academy-v2-private-list">
+            <span>KI Kurs & ChatGPT</span>
+            <span>Smartphone Kurs</span>
+            <span>Social Media Kurs</span>
             <span>Digitale Sicherheit</span>
           </div>
-          <a href="mailto:kontakt@haas-saida-media.de?subject=HSM%20Academy%20Privatkurs">Privaten Kurs anfragen</a>
+          <a href="#planen">Privaten Kurs anfragen</a>
         </div>
       </section>
 
-      <section className="academy-faq" id="faq">
-        <div className="academy-faq-head">
-          <span>Fragen</span>
-          <h2>KI-Schulung & HSM Academy</h2>
+      <section className="academy-v2-planner" id="planen" data-academy-reveal>
+        <div className="academy-v2-planner-head">
+          <span>Seminar planen</span>
+          <h2>In drei Schritten zur passenden Schulung.</h2>
         </div>
-        <div className="academy-faq-list">
+
+        <div className="academy-v2-planner-grid">
+          <div className="academy-v2-planner-controls">
+            <div className="academy-v2-choice">
+              <small>Bereich</small>
+              <div>
+                {["Unternehmen", "Privat"].map((value) => (
+                  <button
+                    type="button"
+                    className={planAudience === value ? "active" : ""}
+                    onClick={() => setPlanAudience(value)}
+                    key={value}
+                  >{value}</button>
+                ))}
+              </div>
+            </div>
+
+            <div className="academy-v2-choice">
+              <small>Thema</small>
+              <div>
+                {(planAudience === "Unternehmen"
+                  ? ["KI-Schulung", "ChatGPT Schulung", "EU AI Act", "KI Beratung"]
+                  : ["KI & ChatGPT", "Smartphone", "Social Media", "Digitale Sicherheit"]
+                ).map((value) => (
+                  <button
+                    type="button"
+                    className={planTopic === value ? "active" : ""}
+                    onClick={() => setPlanTopic(value)}
+                    key={value}
+                  >{value}</button>
+                ))}
+              </div>
+            </div>
+
+            <div className="academy-v2-choice">
+              <small>Format</small>
+              <div>
+                {["Vor Ort", "Remote", "Individuell"].map((value) => (
+                  <button
+                    type="button"
+                    className={planFormat === value ? "active" : ""}
+                    onClick={() => setPlanFormat(value)}
+                    key={value}
+                  >{value}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="academy-v2-summary">
+            <span>HSM Academy</span>
+            <small>{planAudience}</small>
+            <h3>{planTopic}</h3>
+            <p>{planFormat}</p>
+            <a href={plannerHref}>Anfrage vorbereiten</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="academy-v2-faq" id="faq">
+        <div className="academy-v2-faq-head" data-academy-reveal>
+          <span>FAQ</span>
+          <h2>Fragen zu KI-Schulung und Weiterbildung.</h2>
+        </div>
+
+        <div className="academy-v2-faq-list" data-academy-reveal>
           {academyFaqs.map((faq) => (
             <details key={faq.q}>
               <summary>{faq.q}<span>+</span></summary>
@@ -835,12 +952,12 @@ function AcademyPage() {
         </div>
       </section>
 
-      <section className="academy-final">
-        <div className="academy-final-card">
+      <section className="academy-v2-final" data-academy-reveal>
+        <div>
           <span>HSM Academy</span>
-          <h2>Welches Wissen braucht dein Team?</h2>
-          <p>Wir stellen das Format passend zu Unternehmen, Teilnehmern und Einsatzgebiet zusammen.</p>
-          <a href="mailto:kontakt@haas-saida-media.de?subject=KI%20Schulung%20Unternehmen">KI-Schulung anfragen</a>
+          <h2>KI-Schulung passend zu deinem Unternehmen.</h2>
+          <p>Vor Ort in München und Oberbayern oder remote.</p>
+          <a href="#planen">Seminar planen</a>
         </div>
       </section>
     </main>
