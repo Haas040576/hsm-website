@@ -887,7 +887,10 @@ function AcademyPage() {
                   <button
                     type="button"
                     className={planAudience === value ? "active" : ""}
-                    onClick={() => setPlanAudience(value)}
+                    onClick={() => {
+                      setPlanAudience(value);
+                      setPlanTopic(value === "Unternehmen" ? "KI-Schulung" : "KI & ChatGPT");
+                    }}
                     key={value}
                   >{value}</button>
                 ))}
